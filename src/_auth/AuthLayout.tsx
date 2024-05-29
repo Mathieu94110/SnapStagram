@@ -4,7 +4,7 @@ const AuthLayout = () => {
     const isAuthenticated = false;
     return (
         <>
-            {isAuthenticated ? (<Navigate to='/' />) : <>
+            {isAuthenticated ? (<Navigate to='/connexion' />) : <>
                 <section className='flex flex-1 justify-center items-center flex-col py-10'>
                     <Outlet />
                 </section>
