@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate, Link } from 'react-router-dom';
+import { createUser } from "../../apis/users";
 
 type UserSignupInput = {
   name: string;
@@ -16,7 +17,7 @@ type UserSignupInput = {
 }
 
 function SignupForm() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const validationSchema = yup.object({
     name: yup
@@ -59,15 +60,16 @@ function SignupForm() {
   const submit = handleSubmit(async (user) => {
     try {
       clearErrors();
-      console.log(user)
-      navigate('/connection');
+      createUser(user);
     } catch (message) {
-      setError('generic', { type: 'generic', message });
+      console.log(' non ')
+      // setError('generic', { type: 'generic', message });
     }
   });
 
   return (
     <form
+      // action='http://localhost:8000/register.php'
       onSubmit={submit}
       className="flex flex-col gap-5 w-full mt-4 justify-center items-center"
     >
@@ -89,7 +91,7 @@ function SignupForm() {
               type="text"
               className='pl-2 outline-none border-none bg-transparent'
               name="name"
-              {...register("email")}
+              {...register("name")}
               placeholder="Nom"
             />
           </div>
@@ -108,12 +110,12 @@ function SignupForm() {
               type="text"
               className='pl-2 outline-none border-none bg-transparent'
               name="userName"
-              {...register("email")}
+              {...register("userName")}
               placeholder="Nom d'utilisateur"
             />
           </div>
-          {errors.email && (
-            <p className="form-error">{errors.email.message}</p>
+          {errors.userName && (
+            <p className="form-error">{errors.userName.message}</p>
           )}
         </div>
         <div className="d-flex flex-column w-3/4">
