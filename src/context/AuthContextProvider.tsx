@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { createContext, useContext, useEffect, useState } from "react";
 import { IUser } from "../types";
 
@@ -32,47 +31,37 @@ type IContextType = {
 const AuthContext = createContext<IContextType>(INITIAL_STATE);
 
 export function AuthContextProvider({ children }: { children: React.ReactNode }) {
-  const navigate = useNavigate();
   const [user, setUser] = useState<IUser>(INITIAL_USER);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [token, _setToken] = useState(localStorage.getItem('ACCESS_TOKEN'));
-  const [isLoading, setIsLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [token, _setToken] = useState<string | null>(localStorage.getItem('ACCESS_TOKEN'));
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const checkAuthUser = async () => {
-    setIsLoading(true);
-    try {
-      const currentAccount = await getCurrentUser();
-      if (currentAccount) {
-        setUser({
-          id: currentAccount.$id,
-          name: currentAccount.name,
-          username: currentAccount.username,
-          email: currentAccount.email,
-        });
-        setIsAuthenticated(true);
+    // setIsLoading(true);
+    // try {
+    //   const currentAccount = await getCurrentUser();
+    //   if (currentAccount) {
+    //     setUser({
+    //       id: currentAccount.$id,
+    //       name: currentAccount.name,
+    //       username: currentAccount.username,
+    //       email: currentAccount.email,
+    //     });
+    //     setIsAuthenticated(true);
 
-        return true;
-      }
+    //     return true;
+    //   }
 
-      return false;
-    } catch (error) {
-      console.error(error);
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
+    //   return false;
+    // } catch (error) {
+    //   console.error(error);
+    //   return false;
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
   useEffect(() => {
-    const cookieFallback = localStorage.getItem("cookieFallback");
-    if (
-      cookieFallback === "[]" ||
-      cookieFallback === null ||
-      cookieFallback === undefined
-    ) {
-      navigate("/connexion");
-    }
-
     checkAuthUser();
   }, []);
 
