@@ -21,3 +21,25 @@ export async function createUser(newUser: { name: string; userName: string; emai
         }
     }
 }
+
+export async function logUser(UserInfo: { email: string; password: string; generic: { generic: { message: string; } } | null }) {
+    const response = await fetch(API_REGISTER_USERS, {
+        method: 'POST',
+        headers: {
+            "Accept": "application/json",
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(UserInfo),
+    });
+    const body = await response.json();
+    console.log(body);
+    if (response.ok) {
+        return body;
+    } else {
+        if (body) {
+            throw body;
+        } else {
+            throw new Error('Error api logUser');
+        }
+    }
+}

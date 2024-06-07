@@ -1,7 +1,8 @@
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { logUser } from '../../apis/users';
 
 
 type UserSigninInput = {
@@ -15,6 +16,7 @@ type UserSigninInput = {
 }
 
 function SigninForm() {
+  const navigate = useNavigate();
   const validationSchema = yup.object({
     email: yup
       .string()
@@ -42,11 +44,16 @@ function SigninForm() {
     resolver: yupResolver(validationSchema) as any,
   });
 
-  const submit = handleSubmit(async (credentials) => {
+  const submit = handleSubmit(async (user) => {
     try {
       clearErrors();
-      console.log(credentials);
-    } catch (message) {
+      const response = await logUser(user);
+      if (response.status && response.status === 1) {
+        navigate("/home")
+      }
+    } catch (error) {
+      let message = "Erreur lors de la création de l'utilisateur";
+      if (error instanceof Error) message = error.message
       setError('generic', { type: 'generic', message });
     }
   });
@@ -71,7 +78,7 @@ function SigninForm() {
                 d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
             </svg>
             <input
-              type="text"
+              type="email"
               className='pl-2 outline-none border-none bg-transparent'
 
               {...register("email")}

@@ -17,7 +17,7 @@ type UserSignupInput = {
 }
 
 function SignupForm() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const validationSchema = yup.object({
     name: yup
@@ -60,16 +60,19 @@ function SignupForm() {
   const submit = handleSubmit(async (user) => {
     try {
       clearErrors();
-      createUser(user);
-    } catch (message) {
-      console.log(' non ')
-      // setError('generic', { type: 'generic', message });
+      const response = await createUser(user);
+      if (response.status && response.status === 1) {
+        navigate("/connexion")
+      }
+    } catch (error) {
+      let message = "Erreur lors de la création de l'utilisateur";
+      if (error instanceof Error) message = error.message
+      setError('generic', { type: 'generic', message });
     }
   });
 
   return (
     <form
-      // action='http://localhost:8000/register.php'
       onSubmit={submit}
       className="flex flex-col gap-5 w-full mt-4 justify-center items-center"
     >
@@ -90,7 +93,6 @@ function SignupForm() {
             <input
               type="text"
               className='pl-2 outline-none border-none bg-transparent'
-              name="name"
               {...register("name")}
               placeholder="Nom"
             />
@@ -109,7 +111,6 @@ function SignupForm() {
             <input
               type="text"
               className='pl-2 outline-none border-none bg-transparent'
-              name="userName"
               {...register("userName")}
               placeholder="Nom d'utilisateur"
             />
@@ -126,9 +127,8 @@ function SignupForm() {
                 d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
             </svg>
             <input
-              type="text"
+              type="email"
               className='pl-2 outline-none border-none bg-transparent'
-              name="email"
               {...register("email")}
               placeholder="Adresse mail"
             />
@@ -145,7 +145,7 @@ function SignupForm() {
                 d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
                 clip-rule="evenodd" />
             </svg>
-            <input type="password" name="password" {...register('password')} className='pl-2 outline-none border-none bg-transparent' placeholder="Mot de passe" />
+            <input type="password" {...register('password')} className='pl-2 outline-none border-none bg-transparent' placeholder="Mot de passe" />
             {errors.password && (
               <p className="form-error">{errors.password.message}</p>
             )}
