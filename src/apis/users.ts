@@ -1,4 +1,6 @@
-const API_REGISTER_USERS = "http://localhost:8888/api/user/save";
+const BASE_USER_API_URI = "http://localhost:8888/api/user";
+const API_REGISTER_USERS = `${BASE_USER_API_URI}/register.php`;
+const API_LOGIN_USERS = `${BASE_USER_API_URI}/login.php`;
 
 export async function createUser(newUser: { name: string; userName: string; email: string; password: string; generic: { generic: { message: string; }; } | null; }) {
     const response = await fetch(API_REGISTER_USERS, {
@@ -10,7 +12,6 @@ export async function createUser(newUser: { name: string; userName: string; emai
         body: JSON.stringify(newUser),
     });
     const body = await response.json();
-    console.log(body);
     if (response.ok) {
         return body;
     } else {
@@ -23,7 +24,7 @@ export async function createUser(newUser: { name: string; userName: string; emai
 }
 
 export async function logUser(UserInfo: { email: string; password: string; generic: { generic: { message: string; } } | null }) {
-    const response = await fetch(API_REGISTER_USERS, {
+    const response = await fetch(API_LOGIN_USERS, {
         method: 'POST',
         headers: {
             "Accept": "application/json",
@@ -32,7 +33,6 @@ export async function logUser(UserInfo: { email: string; password: string; gener
         body: JSON.stringify(UserInfo),
     });
     const body = await response.json();
-    console.log(body);
     if (response.ok) {
         return body;
     } else {

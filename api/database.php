@@ -5,10 +5,10 @@
  */
 class DbConnect
 {
-    private $server = getenv('DB_HOST');
-    private $dbname = getenv('DB_NAME');
-    private $user = getenv('DB_USER');
-    private $pass = getenv('DB_PASS');
+    private $server = 'localhost';
+    private $dbname = 'socialapp';
+    private $user = 'root';
+    private $pass = 'root';
 
     public function connect()
     {

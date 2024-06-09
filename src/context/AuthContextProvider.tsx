@@ -4,10 +4,9 @@ import { IUser } from "../types";
 export const INITIAL_USER = {
   id: "",
   name: "",
-  username: "",
+  userName: "",
   email: "",
-  imageUrl: "",
-  bio: "",
+  avatar: "",
 };
 
 const INITIAL_STATE = {
@@ -33,7 +32,6 @@ const AuthContext = createContext<IContextType>(INITIAL_STATE);
 export function AuthContextProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<IUser>(INITIAL_USER);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [token, _setToken] = useState<string | null>(localStorage.getItem('ACCESS_TOKEN'));
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const checkAuthUser = async () => {

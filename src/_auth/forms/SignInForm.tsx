@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { logUser } from '../../apis/users';
+import { useUserContext } from '../../context/AuthContextProvider';
 
 
 type UserSigninInput = {
@@ -17,6 +18,7 @@ type UserSigninInput = {
 
 function SigninForm() {
   const navigate = useNavigate();
+  const { setIsAuthenticated, setUser } = useUserContext()
   const validationSchema = yup.object({
     email: yup
       .string()
@@ -48,8 +50,12 @@ function SigninForm() {
     try {
       clearErrors();
       const response = await logUser(user);
-      if (response.status && response.status === 1) {
-        navigate("/home")
+      if (response.status === 0) {
+        let message = response.message
+        setError('generic', { type: 'generic', message });
+      } else {
+        setIsAuthenticated(true);
+        setUser(response.data)
       }
     } catch (error) {
       let message = "Erreur lors de la création de l'utilisateur";
