@@ -92,7 +92,7 @@ function SigninForm() {
             />
           </div>
           {errors.email && (
-            <p className="form-error">{errors.email.message}</p>
+            <p>{errors.email.message}</p>
           )}
         </div>
         <div className="d-flex flex-column w-3/4">
@@ -105,13 +105,13 @@ function SigninForm() {
             </svg>
             <input type="password"  {...register('password')} className='pl-2 outline-none border-none bg-transparent' placeholder="Mot de passe" />
             {errors.password && (
-              <p className="form-error">{errors.password.message}</p>
+              <p>{errors.password.message}</p>
             )}
           </div>
         </div>
         {errors.generic && (
           <div className="mb-10">
-            <p className="form-error">{errors.generic.message}</p>
+            <p>{errors.generic.message}</p>
           </div>
         )}
         <div className="d-flex flex-column w-3/4">

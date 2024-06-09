@@ -84,7 +84,7 @@ function SignupForm() {
           Pour utiliser snapstagram, Veuillez renseigner les informations
         </p>
         <div className="d-flex flex-column w-3/4">
-          <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
+          <div className="flex items-center border-2 py-2 px-3 rounded-2xl">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20"
               fill="currentColor">
               <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
@@ -97,12 +97,15 @@ function SignupForm() {
               placeholder="Nom"
             />
           </div>
-          {errors.email && (
-            <p className="form-error">{errors.email.message}</p>
-          )}
+          <div className='h-6 flex items-center'>
+            {errors.name && (
+              <p>{errors.name.message}</p>
+            )}
+          </div>
+
         </div>
         <div className="d-flex flex-column w-3/4">
-          <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
+          <div className="flex items-center border-2 py-2 px-3 rounded-2xl ">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none"
               viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -115,12 +118,15 @@ function SignupForm() {
               placeholder="Nom d'utilisateur"
             />
           </div>
-          {errors.userName && (
-            <p className="form-error">{errors.userName.message}</p>
-          )}
+          <div className='h-6 flex items-center'>
+            {errors.userName && (
+              <p>{errors.userName.message}</p>
+            )}
+          </div>
+
         </div>
         <div className="d-flex flex-column w-3/4">
-          <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
+          <div className="flex items-center border-2 py-2 px-3 rounded-2xl ">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" fill="none"
               viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -133,12 +139,14 @@ function SignupForm() {
               placeholder="Adresse mail"
             />
           </div>
-          {errors.email && (
-            <p className="form-error">{errors.email.message}</p>
-          )}
+          <div className='h-6 flex items-center'>
+            {errors.email && (
+              <p>{errors.email.message}</p>
+            )}
+          </div>
         </div>
         <div className="d-flex flex-column w-3/4">
-          <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
+          <div className="flex items-center border-2 py-2 px-3 rounded-2xl ">
 
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20"
               fill="currentColor">
@@ -149,17 +157,17 @@ function SignupForm() {
 
             <input type="password" {...register('password')} className='pl-2 outline-none border-none bg-transparent' placeholder="Mot de passe" />
           </div>
-          {errors.password && (
-            <p className="form-error">{errors.password.message}</p>
-          )}
+          <div className='h-6 flex items-center'>
+            {errors.password && (
+              <p>{errors.password.message}</p>
+            )}
+          </div>
         </div>
         {errors.generic && (
-          <div className="mb-10">
-            <p className="form-error">{errors.generic.message}</p>
-          </div>
+          <p>{errors.generic.message}</p>
         )}
         <div className="d-flex flex-column w-3/4">
-          <button disabled={isSubmitting} className="block w-full bg-primary-500 mt-4 py-2 rounded-2xl text-white font-semibold mb-2">S'inscrire</button>
+          <button disabled={isSubmitting} className="block w-full bg-primary-500 py-2 rounded-2xl text-white font-semibold mb-2">S'inscrire</button>
         </div>
         <p className="text-small-regular text-light-2 text-center mt-2">
           Vous avez déja un compte ?
