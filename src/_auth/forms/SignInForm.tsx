@@ -104,13 +104,15 @@ function SigninForm() {
                 clip-rule="evenodd" />
             </svg>
             <input type="password"  {...register('password')} className='pl-2 outline-none border-none bg-transparent' placeholder="Mot de passe" />
+          </div>
+          <div className='h-6 flex items-center'>
             {errors.password && (
               <p>{errors.password.message}</p>
             )}
           </div>
         </div>
-        {errors.generic && (
-          <div className="mb-10">
+        {errors.generic && !errors.password && (
+          <div>
             <p>{errors.generic.message}</p>
           </div>
         )}
