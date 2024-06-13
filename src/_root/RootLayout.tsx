@@ -1,6 +1,8 @@
 
 import { Navigate, Outlet } from "react-router-dom";
 import { useUserContext } from "../context/AuthContextProvider";
+import LeftSidebar from "../components/LeftSidebar";
+import Topbar from "../components/Topbar";
 
 const RootLayout = () => {
   const { isAuthenticated } = useUserContext();
@@ -9,8 +11,12 @@ const RootLayout = () => {
     return <Navigate to="/connexion" />
   }
   return (
-    <div>
-      <Outlet />
+    <div className="w-full md:flex">
+      <Topbar />
+      <LeftSidebar />
+      <section className="flex flex-1 h-full">
+        <Outlet />
+      </section>
     </div>
   )
 }

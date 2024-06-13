@@ -4,3 +4,8 @@ export type IUser = {
     username: string;
     email: string;
 };
+export type INavLink = {
+    imgURL: string;
+    route: string;
+    label: string;
+};
