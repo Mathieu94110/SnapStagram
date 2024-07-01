@@ -3,6 +3,7 @@ export type IUser = {
     name: string;
     username: string;
     email: string;
+    save: { post: { id: string } }[];
 };
 export type INavLink = {
     imgURL: string;
