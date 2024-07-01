@@ -20,7 +20,7 @@ const PostCard = ({ post }: PostCardProps) => {
                         <img
                             src={
                                 post.creator?.imageUrl ||
-                                "/assets/icons/profile-placeholder.svg"
+                                "/public/assets/images/profile-placeholder.svg"
                             }
                             alt="creator"
                             className="w-12 lg:h-12 rounded-full"
@@ -47,7 +47,7 @@ const PostCard = ({ post }: PostCardProps) => {
                     to={`/update-post/${post.$id}`}
                     className={`${user.id !== post.creator.$id && "hidden"}`}>
                     <img
-                        src={"/assets/icons/edit.svg"}
+                        src={"/public/assets/images/edit.svg"}
                         alt="edit"
                         width={20}
                         height={20}
@@ -68,7 +68,7 @@ const PostCard = ({ post }: PostCardProps) => {
                 </div>
 
                 <img
-                    src={post.imageUrl || "/assets/icons/profile-placeholder.svg"}
+                    src={post.imageUrl || "/public/assets/images/profile-placeholder.svg"}
                     alt="post image"
                     className="post-card_img"
                 />
