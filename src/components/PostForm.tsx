@@ -12,8 +12,10 @@ import {
     Input,
     Textarea,
 } from '../components/ui'
+import FileUploader from "./FileUploader";
 
 type PostFormProps = {
+    post?: any,
     action: "Créer" | "Mettre à jour";
 };
 
@@ -24,7 +26,7 @@ const PostValidation = z.object({
     tags: z.string(),
 });
 
-const PostForm = ({ action }: PostFormProps) => {
+const PostForm = ({ post, action }: PostFormProps) => {
     const navigate = useNavigate();
     const form = useForm<z.infer<typeof PostValidation>>({
         resolver: zodResolver(PostValidation),
@@ -66,6 +68,10 @@ const PostForm = ({ action }: PostFormProps) => {
                     render={({ field }) => (
                         <FormItem>
                             <label className="shad-form_label">Ajouter des photos</label>
+                            <FileUploader
+                                fieldChange={field.onChange}
+                                mediaUrl={post?.imageUrl}
+                            />
                             <FormMessage className="shad-form_message" />
                         </FormItem>
                     )}
