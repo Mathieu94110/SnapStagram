@@ -4,6 +4,7 @@ import RootLayout from "./_root/RootLayout.js";
 import AuthLayout from "./_auth/AuthLayout.js";
 import SigninForm from "./_auth/forms/SignInForm.js";
 import SignupForm from "./_auth/forms/SignUpForm.js";
+import CreatePost from "./_root/pages/CreatePost.js";
 
 const router = createBrowserRouter([
     {
@@ -13,7 +14,12 @@ const router = createBrowserRouter([
             {
                 path: '/home',
                 element: <Home />
-            }]
+            },
+            {
+                path: '/create-Post',
+                element: <CreatePost />
+            },
+        ]
     },
     {
         path: '/',
