@@ -1,6 +1,6 @@
 import { API_CREATE_POST } from "../constants"
 
-export async function createPost(newPost: { caption: string; file: string; location: string; tags: string } | null) {
+export async function createPost(newPost: { caption: string; file: string; location: string; tags: string, author: number } | null) {
     const response = await fetch(API_CREATE_POST, {
         method: 'POST',
         headers: {

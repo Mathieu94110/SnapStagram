@@ -13,6 +13,7 @@ import {
 } from '../components/ui'
 import FileUploader from "./FileUploader"
 import { createPost } from "../apis/posts"
+import { useUserContext } from '../context/AuthContextProvider'
 
 type PostFormProps = {
     post?: any,
@@ -21,7 +22,6 @@ type PostFormProps = {
 
 const PostValidation = z.object({
     caption: z.string().min(5, { message: "Minimum 5 caractères" }).max(200, { message: "Maximum 200 caractères" }),
-    // file: z.custom<File[]>(),
     file: z.string().min(1),
     location: z.string().min(1, { message: "Ce champs est requis" }).max(100, { message: "Maximum 100 caractères" }),
     tags: z.string(),
@@ -29,6 +29,7 @@ const PostValidation = z.object({
 
 const PostForm = ({ post, action }: PostFormProps) => {
     const navigate = useNavigate();
+    const { user } = useUserContext()
     const form = useForm<z.infer<typeof PostValidation>>({
         resolver: zodResolver(PostValidation),
         defaultValues: {
@@ -41,7 +42,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
 
     const handleSubmit = async (value: z.infer<typeof PostValidation>) => {
         try {
-            const response = await createPost(value);
+            const response = await createPost({ ...value, author: user.iduser });
             if (response.status && response.status === 1) {
                 navigate("/")
             }

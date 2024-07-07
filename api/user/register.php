@@ -10,7 +10,7 @@ $connection = $objDb->connect();
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'POST') {
     $newUser = json_decode(file_get_contents("php://input"));
-    $sql = "INSERT INTO user(id, email, name, userName, password) VALUES(null, :email, :name, :userName, :password)";
+    $sql = "INSERT INTO user(iduser, email, name, userName, password) VALUES(null, :email, :name, :userName, :password)";
     $stmt = $connection->prepare($sql);
     $password = $newUser->password;
     $hashedPassword = password_hash($password, PASSWORD_ARGON2ID);

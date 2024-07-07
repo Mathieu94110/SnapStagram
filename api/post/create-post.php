@@ -10,12 +10,13 @@ $connection = $objDb->connect();
 $method = $_SERVER['REQUEST_METHOD'];
 if ($method === 'POST') {
     $newUser = json_decode(file_get_contents("php://input"));
-    $sql = "INSERT INTO post(id, caption, file, location, tags) VALUES(null, :caption, :file, :location, :tags)";
+    $sql = "INSERT INTO post(idpost, caption, file, location, tags, author) VALUES(null, :caption, :file, :location, :tags, :author)";
     $stmt = $connection->prepare($sql);
     $stmt->bindParam(':caption', $newUser->caption);
     $stmt->bindParam(':file', $newUser->file);
     $stmt->bindParam(':location', $newUser->location);
     $stmt->bindParam(':tags', $newUser->tags);
+    $stmt->bindParam(':author', $newUser->author);
     if ($stmt->execute()) {
         $response = ['status' => 1, 'message' => 'Post crée !'];
     } else {
