@@ -12,8 +12,9 @@ import {
     Textarea,
 } from '../components/ui'
 import FileUploader from "./FileUploader"
-import { createPost } from "../apis/posts"
 import { useUserContext } from '../context/AuthContextProvider'
+import { useCreatePost } from '../lib/react-query/queries'
+import Loader from "./Loader"
 
 type PostFormProps = {
     post?: any,
@@ -39,10 +40,15 @@ const PostForm = ({ post, action }: PostFormProps) => {
             tags: "",
         },
     });
+    const { mutateAsync: createPost, isLoading: isLoadingCreate } =
+        useCreatePost();
 
     const handleSubmit = async (value: z.infer<typeof PostValidation>) => {
         try {
-            const response = await createPost({ ...value, author: user.iduser });
+            const response = await createPost({
+                ...value,
+                author: user.iduser!
+            });
             if (response.status && response.status === 1) {
                 navigate("/")
             }
@@ -52,7 +58,6 @@ const PostForm = ({ post, action }: PostFormProps) => {
             console.error(message)
         }
     };
-
     return (
         <Form {...form}>
             <form
@@ -129,7 +134,8 @@ const PostForm = ({ post, action }: PostFormProps) => {
                     <Button
                         type="submit"
                         className="shad-button_primary whitespace-nowrap"
-                        disabled={false}>
+                        disabled={isLoadingCreate}>
+                        {isLoadingCreate && <Loader />}
                         {action} un post
                     </Button>
                 </div>

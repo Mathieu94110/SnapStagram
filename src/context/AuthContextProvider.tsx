@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { IUser } from "../types";
+import { INewUser } from "../types";
 
 export const INITIAL_USER = {
-  id: "",
+  iduser: "",
   name: "",
   userName: "",
   email: "",
@@ -19,9 +19,9 @@ const INITIAL_STATE = {
 };
 
 type IContextType = {
-  user: IUser;
+  user: INewUser;
   isLoading: boolean;
-  setUser: React.Dispatch<React.SetStateAction<IUser>>;
+  setUser: React.Dispatch<React.SetStateAction<INewUser>>;
   isAuthenticated: boolean;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   checkAuthUser: () => Promise<boolean>;
@@ -30,7 +30,7 @@ type IContextType = {
 const AuthContext = createContext<IContextType>(INITIAL_STATE);
 
 export function AuthContextProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<IUser>(INITIAL_USER);
+  const [user, setUser] = useState<INewUser>(INITIAL_USER);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 

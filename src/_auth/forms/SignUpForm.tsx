@@ -1,8 +1,10 @@
-import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useNavigate, Link } from 'react-router-dom';
-import { createUser } from "../../apis/users";
+import { useForm } from 'react-hook-form'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useNavigate, Link } from 'react-router-dom'
+import { useCreateUserAccount } from "../../lib/react-query/queries"
+import Loader from "../../components/Loader"
+const { mutateAsync: createUserAccount, isLoading: isCreatingAccount } = useCreateUserAccount()
 
 type UserSignupInput = {
   name: string;
@@ -60,7 +62,7 @@ function SignupForm() {
   const submit = handleSubmit(async (user) => {
     try {
       clearErrors();
-      const response = await createUser(user);
+      const response = await createUserAccount(user);
       if (response.status && response.status === 1) {
         navigate("/connexion")
       }
@@ -167,7 +169,18 @@ function SignupForm() {
           <p>{errors.generic.message}</p>
         )}
         <div className="d-flex flex-column w-3/4">
-          <button disabled={isSubmitting} className="block w-full bg-primary-500 py-2 rounded-2xl text-white font-semibold mb-2">S'inscrire</button>
+
+          <button disabled={isSubmitting} className="block w-full bg-primary-500 py-2 rounded-2xl text-white font-semibold mb-2">
+            {isCreatingAccount ? (
+              <div className="flex-center gap-2">
+                <Loader /> Chargement...
+              </div>
+            ) : (
+              <span>
+                S'inscrire
+              </span>
+            )}
+          </button>
         </div>
         <p className="text-small-regular text-light-2 text-center mt-2">
           Vous avez déja un compte ?
