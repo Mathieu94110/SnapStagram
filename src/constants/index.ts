@@ -1,3 +1,9 @@
+const BASE_USER_API_URI = "http://localhost:8888/api/user"
+const BASE_POST_API_URI = "http://localhost:8888/api/post"
+export const API_REGISTER_USERS = `${BASE_USER_API_URI}/register.php`
+export const API_LOGIN_USERS = `${BASE_USER_API_URI}/login.php`
+export const API_CREATE_POST = `${BASE_POST_API_URI}/create-post.php`
+
 export const sidebarLinks = [
     {
         imgURL: "/public/assets/images/home.svg",

@@ -1,8 +1,7 @@
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import { zodResolver } from "@hookform/resolvers/zod";
-
+import * as z from "zod"
+import { useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
+import { zodResolver } from "@hookform/resolvers/zod"
 import {
     Form,
     FormField,
@@ -12,7 +11,8 @@ import {
     Input,
     Textarea,
 } from '../components/ui'
-import FileUploader from "./FileUploader";
+import FileUploader from "./FileUploader"
+import { createPost } from "../apis/posts"
 
 type PostFormProps = {
     post?: any,
@@ -21,7 +21,8 @@ type PostFormProps = {
 
 const PostValidation = z.object({
     caption: z.string().min(5, { message: "Minimum 5 caractères" }).max(200, { message: "Maximum 200 caractères" }),
-    file: z.custom<File[]>(),
+    // file: z.custom<File[]>(),
+    file: z.string().min(1),
     location: z.string().min(1, { message: "Ce champs est requis" }).max(100, { message: "Maximum 100 caractères" }),
     tags: z.string(),
 });
@@ -32,14 +33,23 @@ const PostForm = ({ post, action }: PostFormProps) => {
         resolver: zodResolver(PostValidation),
         defaultValues: {
             caption: "",
-            file: [],
+            file: "",
             location: "",
             tags: "",
         },
     });
 
     const handleSubmit = async (value: z.infer<typeof PostValidation>) => {
-        console.log(value)
+        try {
+            const response = await createPost(value);
+            if (response.status && response.status === 1) {
+                navigate("/")
+            }
+        } catch (error) {
+            let message = "Erreur lors de la création du post";
+            if (error instanceof Error) message = error.message
+            console.error(message)
+        }
     };
 
     return (
