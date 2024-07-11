@@ -1,6 +1,7 @@
-import { createPost } from '@/apis/posts'
+import { createPost, getPosts } from '@/apis/posts'
 import {
     useMutation,
+    useQuery,
     useQueryClient,
 } from "@tanstack/react-query";
 import { INewUser, INewPost } from '@/types';
@@ -45,4 +46,9 @@ export const useCreatePost = () => {
     });
 };
 
-
+export async function useGetUserPosts() {
+    return useQuery({
+        queryKey: ['getPosts'],
+        queryFn: getPosts,
+    });
+}
