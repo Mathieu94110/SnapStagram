@@ -2,9 +2,8 @@ import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigate, Link } from 'react-router-dom'
-import { useCreateUserAccount } from "../../lib/react-query/queries"
-import Loader from "../../components/Loader"
-const { mutateAsync: createUserAccount, isLoading: isCreatingAccount } = useCreateUserAccount()
+import { useCreateUserAccount } from "@/lib/react-query/queries"
+import Loader from "@/components/Loader"
 
 type UserSignupInput = {
   name: string;
@@ -20,6 +19,7 @@ type UserSignupInput = {
 
 function SignupForm() {
   const navigate = useNavigate();
+  const { mutateAsync: createUserAccount, isLoading: isCreatingAccount } = useCreateUserAccount()
 
   const validationSchema = yup.object({
     name: yup

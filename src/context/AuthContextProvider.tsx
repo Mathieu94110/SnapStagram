@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { INewUser } from "../types";
+import { INewUser } from "@/types";
 
 export const INITIAL_USER = {
   iduser: "",

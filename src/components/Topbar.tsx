@@ -1,7 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
-import { useUserContext } from "../context/AuthContextProvider";
+import { useUserContext } from "@/context/AuthContextProvider";
 
 const Topbar = () => {
     const { user } = useUserContext();

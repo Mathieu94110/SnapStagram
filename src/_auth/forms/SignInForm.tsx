@@ -1,10 +1,10 @@
-import { useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { logUser } from '../../apis/users';
-import { useUserContext } from '../../context/AuthContextProvider';
-
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useUserContext } from '@/context/AuthContextProvider'
+import { useSignInAccount } from '@/lib/react-query/queries';
+import Loader from '@/components/Loader'
 
 type UserSigninInput = {
   email: string;
@@ -19,6 +19,7 @@ type UserSigninInput = {
 function SigninForm() {
   const navigate = useNavigate();
   const { setIsAuthenticated, setUser } = useUserContext()
+  const { mutateAsync: signInAccount, isLoading } = useSignInAccount();
   const validationSchema = yup.object({
     email: yup
       .string()
@@ -49,7 +50,7 @@ function SigninForm() {
   const submit = handleSubmit(async (user) => {
     try {
       clearErrors();
-      const response = await logUser(user);
+      const response = await signInAccount(user);
       if (response.status === 0) {
         let message = response.message
         setError('generic', { type: 'generic', message });
@@ -117,7 +118,15 @@ function SigninForm() {
           </div>
         )}
         <div className="d-flex flex-column w-3/4">
-          <button disabled={isSubmitting} className="block w-full bg-primary-500 mt-4 py-2 rounded-2xl text-white font-semibold mb-2">Connexion</button>
+          <button disabled={isSubmitting} className="block w-full bg-primary-500 mt-4 py-2 rounded-2xl text-white font-semibold mb-2">
+            {isLoading ? (
+              <div className="flex-center gap-2">
+                <Loader /> Chargement...
+              </div>
+            ) : (
+              "Connexion"
+            )}
+          </button>
         </div>
         <p className="text-small-regular text-light-2 text-center mt-2">
           Vous n'avez pas encore de compte ?

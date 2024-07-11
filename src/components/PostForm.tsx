@@ -10,10 +10,10 @@ import {
     Button,
     Input,
     Textarea,
-} from '../components/ui'
+} from '@/components/ui'
 import FileUploader from "./FileUploader"
-import { useUserContext } from '../context/AuthContextProvider'
-import { useCreatePost } from '../lib/react-query/queries'
+import { useUserContext } from '@/context/AuthContextProvider'
+import { useCreatePost } from '@/lib/react-query/queries'
 import Loader from "./Loader"
 
 type PostFormProps = {

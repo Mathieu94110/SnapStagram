@@ -1,8 +1,8 @@
 
 import { Navigate, Outlet } from "react-router-dom";
-import { useUserContext } from "../context/AuthContextProvider";
-import LeftSidebar from "../components/LeftSidebar";
-import Topbar from "../components/Topbar";
+import { useUserContext } from "@/context/AuthContextProvider";
+import LeftSidebar from "@/components/LeftSidebar";
+import Topbar from "@/components/Topbar";
 
 const RootLayout = () => {
   const { isAuthenticated } = useUserContext();

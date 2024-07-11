@@ -1,4 +1,4 @@
-import { API_REGISTER_USERS, API_LOGIN_USERS } from "../constants"
+import { API_REGISTER_USERS, API_LOGIN_USERS } from "@/constants"
 
 export async function createUser(newUser: { name: string; userName: string; email: string; password: string; generic: { generic: { message: string; }; } | null; }) {
     const response = await fetch(API_REGISTER_USERS, {

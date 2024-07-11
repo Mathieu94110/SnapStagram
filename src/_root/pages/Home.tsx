@@ -1,4 +1,4 @@
-import { useUserContext } from '../../context/AuthContextProvider'
+import { useUserContext } from '@/context/AuthContextProvider'
 
 const Home = () => {
     const { user } = useUserContext()
