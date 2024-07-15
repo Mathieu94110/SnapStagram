@@ -5,20 +5,17 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 
 $connection = new mysqli('localhost', 'root', 'root', 'socialapp');
-$method = $_SERVER['REQUEST_METHOD'];
+$sql = "SELECT * FROM post";
+$res = mysqli_query($connection, $sql);
+if ($res) {
+    if (mysqli_num_rows($res) !== 0) {
+        $usersPosts = mysqli_fetch_all($res, MYSQLI_ASSOC);
 
-if ($method === 'POST') {
-    $sql = "SELECT * FROM post";
-    $res = mysqli_query($connection, $sql);
-    if ($res) {
-        if (mysqli_num_rows($res) !== 0) {
-            $usersPosts = mysqli_fetch_assoc($res);
-            $response = ['status' => 1, 'data' => $usersPosts];
-        } else {
-            $response = ['status' => 0, 'message' => "Aucun post trouvé !"];
-        }
+        $response = ['status' => 1, 'data' => $usersPosts];
     } else {
-        $response = ['status' => 0, 'message' => "Problème serveur !"];
+        $response = ['status' => 0, 'message' => "Aucun post trouvé !"];
     }
-    echo json_encode($response);
+} else {
+    $response = ['status' => 0, 'message' => "Problème serveur !"];
 }
+echo json_encode($response);

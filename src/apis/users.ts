@@ -21,7 +21,7 @@ export async function createUser(newUser: { name: string; userName: string; emai
     }
 }
 
-export async function logUser(UserInfo: { email: string; password: string; generic: { generic: { message: string; } } | null }) {
+export async function logUser(UserInfo: { email: string; password: string }) {
     const response = await fetch(API_LOGIN_USERS, {
         method: 'POST',
         headers: {

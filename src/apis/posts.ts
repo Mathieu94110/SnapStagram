@@ -22,20 +22,17 @@ export async function createPost(newPost: { caption: string; file: string; locat
 }
 
 export async function getPosts() {
-    const response = await fetch(API_GET_POSTS, {
-        headers: {
-            "Accept": "application/json",
-            'Content-Type': 'application/json',
-        },
-    });
-    const body = await response.json();
-    if (response.ok) {
-        return body;
-    } else {
-        if (body) {
-            throw body;
-        } else {
-            throw new Error('Error api getUsersPosts');
-        }
+    try {
+        const response = await fetch(API_GET_POSTS, {
+            headers: {
+                "Accept": "application/json",
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = response.json();
+        if (!data) throw Error;
+        return data;
+    } catch (error) {
+        console.log(error);
     }
 }

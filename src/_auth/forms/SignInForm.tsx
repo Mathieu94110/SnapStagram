@@ -50,7 +50,8 @@ function SigninForm() {
   const submit = handleSubmit(async (user) => {
     try {
       clearErrors();
-      const response = await signInAccount(user);
+      const { generic, ...userInfos } = user;
+      const response = await signInAccount(userInfos);
       if (response.status === 0) {
         let message = response.message
         setError('generic', { type: 'generic', message });

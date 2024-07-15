@@ -2,6 +2,8 @@ import Loader from '@/components/Loader';
 import PostCard from '@/components/PostCard';
 import { useUserContext } from '@/context/AuthContextProvider'
 import { useGetUserPosts } from '@/lib/react-query/queries';
+import { INewPost } from '@/types';
+import { useEffect } from 'react';
 
 const Home = () => {
     const { user } = useUserContext()
@@ -30,8 +32,8 @@ const Home = () => {
                             <Loader />
                         ) : (
                             <ul className="flex flex-col flex-1 gap-9 w-full ">
-                                {posts?.documents.map((post) => (
-                                    <li key={post.$id} className="flex justify-center w-full">
+                                {posts?.data.map((post: INewPost) => (
+                                    <li key={post.idpost} className="flex justify-center w-full">
                                         <PostCard post={post} />
                                     </li>
                                 ))}
