@@ -58,7 +58,6 @@ const PostForm = ({ post, action }: PostFormProps) => {
         useCreatePost();
 
     const handleSubmit = async (value: z.infer<typeof PostValidation>) => {
-        console.log(value);
         try {
             const response = await createPost({
                 ...value,
