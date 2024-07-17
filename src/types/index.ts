@@ -18,7 +18,7 @@ export type INewUser = {
 export type INewPost = {
     idpost?: string;
     caption: string;
-    file: string;
+    file?: File;
     location: string;
     tags: string;
     author: number

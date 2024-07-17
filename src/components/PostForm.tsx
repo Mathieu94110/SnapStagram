@@ -21,9 +21,23 @@ type PostFormProps = {
     action: "Créer" | "Mettre à jour";
 };
 
+const MAX_FILE_SIZE = 10000;
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/svg", "image/webp"];
+
 const PostValidation = z.object({
     caption: z.string().min(5, { message: "Minimum 5 caractères" }).max(200, { message: "Maximum 200 caractères" }),
-    file: z.string().min(1),
+    file: z
+        .instanceof(File)
+        .optional()
+        .refine(
+            (file) => !file || file.size !== 0 || file.size <= MAX_FILE_SIZE,
+            `Max image size is ${MAX_FILE_SIZE / 1000}MB`
+        )
+        .refine(
+            (file) =>
+                !file || file.type === "" || ACCEPTED_IMAGE_TYPES.includes(file.type),
+            "Only .jpg, .jpeg, and .png formats are supported"
+        ),
     location: z.string().min(1, { message: "Ce champs est requis" }).max(100, { message: "Maximum 100 caractères" }),
     tags: z.string(),
 });
@@ -35,7 +49,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
         resolver: zodResolver(PostValidation),
         defaultValues: {
             caption: "",
-            file: "",
+            file: undefined,
             location: "",
             tags: "",
         },
@@ -44,6 +58,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
         useCreatePost();
 
     const handleSubmit = async (value: z.infer<typeof PostValidation>) => {
+        console.log(value);
         try {
             const response = await createPost({
                 ...value,

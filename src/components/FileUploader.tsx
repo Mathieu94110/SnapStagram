@@ -4,7 +4,7 @@ import { Button } from "./ui"
 import { convertFileToUrl } from "@/lib/utils"
 
 type FileUploaderProps = {
-    fieldChange: (files: string) => void;
+    fieldChange: (files: File) => void;
     mediaUrl: string;
 };
 
@@ -15,9 +15,9 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
     const onDrop = useCallback(
         (acceptedFiles: FileWithPath[]) => {
             setFile(acceptedFiles);
-            // fieldChange(acceptedFiles);
-            const convertedFileUrl = convertFileToUrl(acceptedFiles[0])
-            fieldChange(convertedFileUrl);
+            fieldChange(acceptedFiles[0]);
+            const convertedFileUrl = convertFileToUrl(acceptedFiles[0]);
+
             setFileUrl(convertedFileUrl);
         },
         [file]
@@ -34,7 +34,7 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
         <div
             {...getRootProps()}
             className="flex flex-center flex-col bg-dark-3 rounded-xl cursor-pointer">
-            <input {...getInputProps()} className="cursor-pointer" />
+            <input {...getInputProps()} className="cursor-pointer" type="file" name="image" />
 
             {fileUrl ? (
                 <>
