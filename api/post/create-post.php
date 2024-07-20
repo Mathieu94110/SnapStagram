@@ -4,25 +4,73 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
+header("Access-Control-Allow-Methods: *");
+header("Access-Control-Allow-Credentials: true");
 
 $objDb = new DbConnect;
 $connection = $objDb->connect();
 $method = $_SERVER['REQUEST_METHOD'];
+$fileResponse = array();
+$upload_dir = '../uploads';
+$server_url = 'http://localhost:8888/api/post/';
+
+$status = $statusMsg = '';
 if ($method === 'POST') {
-    $newUser = json_decode(file_get_contents("php://input"));
-    // first of all we try to insert images on separate table on mysql
-    echo $_FILES;
-    $fileName = $_FILES["image"]["name"];
-    $ext = pathinfo($fileName, PATHINFO_EXTENSION);
-    $allowedTypes = array("jpg", "jpeg", "png", "gif");
-    $tempName = $_FILES["image"]["tmp_name"];
-    $targetPath = "../uploads/" . $fileName;
-    if (in_array($ext, $allowedTypes)) {
-        if (move_uploaded_file($tempName, $targetPath)) {
-            $query = "INSERT INTO images (name, filename) VALUES ('$fullName', '$fileName')";
+    // for image 
+    $status = 'error';
+    if (($_FILES['file'])) {
+        $file_name = $_FILES["file"]["name"];
+        $file_tmp_name = $_FILES["file"]["tmp_name"];
+        $error = $_FILES["file"]["error"];
+        if ($error > 0) {
+            $fileResponse = array(
+                "status" => "error",
+                "error" => true,
+                "message" => "Erreur lors du téléchargement de l'image!"
+            );
+        } else {
+            $random_name = rand(1000, 1000000) . "-" . $file_name;
+            $upload_name = $upload_dir . strtolower($random_name);
+            $upload_name = preg_replace('/\s+/', '-', $upload_name);
+
+            if (move_uploaded_file($file_tmp_name, $upload_name)) {
+                $fileResponse = array(
+                    "status" => "success",
+                    "error" => false,
+                    "message" => "Image téléchargée correctement",
+                    "url" => $server_url . "/" . $upload_name
+                );
+
+                $host = "localhost";
+                $user = "root";
+                $password = "root";
+                $dbname = "socialapp";
+
+                $con = mysqli_connect($host, $user, $password, $dbname);
+
+                if (!$con) {
+                    die("La connexion a échouée: " . mysqli_connect_error());
+                }
+
+                $sql = "insert into images (image) values ('$upload_name')";
+                mysqli_query($con, $sql);
+            } else {
+                $response = array(
+                    "status" => "error",
+                    "error" => true,
+                    "message" => "Erreur lors du téléchargement de l'image!"
+                );
+            }
         }
+    } else {
+        $response = array(
+            "status" => "error",
+            "error" => true,
+            "message" => "Aucune image n'a été transmise!"
+        );
     }
-    // After we insert post 
+    // for the rest remain to fix issues
+    $newUser = json_decode(file_get_contents("php://input"));
     $sql = "INSERT INTO post(idpost, caption, file, location, tags, author) VALUES(null, :caption, :file, :location, :tags, :author)";
     $stmt = $connection->prepare($sql);
     $stmt->bindParam(':caption', $newUser->caption);
@@ -35,30 +83,7 @@ if ($method === 'POST') {
     } else {
         $response = ['status' => 0, 'message' => "Erreur lors de la création du post !"];
     }
+    echo json_encode($fileResponse);
+
     echo json_encode($response);
-}
-
-
-
-if ($_POST["submit"]) {
-    $fullName = $_POST["fullname"];
-    $fileName = $_FILES["image"]["name"];
-    $ext = pathinfo($fileName, PATHINFO_EXTENSION);
-    $allowedTypes = array("jpg", "jpeg", "png", "gif");
-    $tempName = $_FILES["image"]["tmp_name"];
-    $targetPath = "uploads/" . $fileName;
-    if (in_array($ext, $allowedTypes)) {
-        if (move_uploaded_file($tempName, $targetPath)) {
-            $query = "INSERT INTO images (name, filename) VALUES ('$fullName', '$fileName')";
-            if (mysqli_query($conn, $query)) {
-                header("Location: index.php");
-            } else {
-                echo "Something is wrong";
-            }
-        } else {
-            echo "File is not uploaded";
-        }
-    } else {
-        echo "Your files are not allowed";
-    }
 }

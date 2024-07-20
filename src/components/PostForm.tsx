@@ -59,18 +59,25 @@ const PostForm = ({ post, action }: PostFormProps) => {
 
     const handleSubmit = async (value: z.infer<typeof PostValidation>) => {
         try {
-            const response = await createPost({
-                ...value,
-                author: user.iduser!
-            });
-            if (response.status && response.status === 1) {
-                navigate("/")
+            if (user.iduser) {
+                const formData = new FormData();
+                formData.append('caption', value.caption)
+                formData.append('file', value.file!)
+                formData.append('location', value.location)
+                formData.append('tags', value.tags)
+                formData.append('author', user.iduser)
+                const response = await createPost(formData);
+                if (response.status && response.status === 1) {
+                    navigate("/")
+                }
             }
         } catch (error) {
             let message = "Erreur lors de la création du post";
             if (error instanceof Error) message = error.message
             console.error(message)
         }
+
+
     };
     return (
         <Form {...form}>

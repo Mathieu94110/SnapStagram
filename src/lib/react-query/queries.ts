@@ -37,7 +37,7 @@ export const useSignInAccount = () => {
 export const useCreatePost = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (post: INewPost) => createPost(post),
+        mutationFn: (post: any) => createPost(post),
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ['getRecentPosts'],

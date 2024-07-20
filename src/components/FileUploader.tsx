@@ -14,6 +14,7 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
 
     const onDrop = useCallback(
         (acceptedFiles: FileWithPath[]) => {
+            console.log('acceptedFiles', acceptedFiles)
             setFile(acceptedFiles);
             fieldChange(acceptedFiles[0]);
             const convertedFileUrl = convertFileToUrl(acceptedFiles[0]);
