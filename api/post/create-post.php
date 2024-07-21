@@ -9,81 +9,69 @@ header("Access-Control-Allow-Credentials: true");
 
 $objDb = new DbConnect;
 $connection = $objDb->connect();
-$method = $_SERVER['REQUEST_METHOD'];
-$fileResponse = array();
-$upload_dir = '../uploads';
-$server_url = 'http://localhost:8888/api/post/';
 
-$status = $statusMsg = '';
+$method = $_SERVER['REQUEST_METHOD'];
+$upload_dir = '../uploads';
+$upload_name = '';
+
 if ($method === 'POST') {
     // for image 
-    $status = 'error';
-    if (($_FILES['file'])) {
-        $file_name = $_FILES["file"]["name"];
-        $file_tmp_name = $_FILES["file"]["tmp_name"];
-        $error = $_FILES["file"]["error"];
-        if ($error > 0) {
-            $fileResponse = array(
-                "status" => "error",
-                "error" => true,
-                "message" => "Erreur lors du téléchargement de l'image!"
-            );
-        } else {
-            $random_name = rand(1000, 1000000) . "-" . $file_name;
-            $upload_name = $upload_dir . strtolower($random_name);
-            $upload_name = preg_replace('/\s+/', '-', $upload_name);
+    $file_name = $_FILES["file"]["name"];
+    $file_tmp_name = $_FILES["file"]["tmp_name"];
+    $error = $_FILES["file"]["error"];
+    if ($error === 0) {
+        $random_name = rand(1000, 1000000) . "-" . $file_name;
+        $upload_name = $upload_dir . strtolower($random_name);
+        $upload_name = preg_replace('/\s+/', '-', $upload_name);
 
-            if (move_uploaded_file($file_tmp_name, $upload_name)) {
-                $fileResponse = array(
-                    "status" => "success",
-                    "error" => false,
-                    "message" => "Image téléchargée correctement",
-                    "url" => $server_url . "/" . $upload_name
-                );
+        if (move_uploaded_file($file_tmp_name, $upload_name)) {
+            // we set all values and execute sql query
+            $caption = $_POST['caption'];
+            $location = $_POST['location'];
+            $tags = $_POST['tags'];
+            $image = $upload_name;
+            $author = $_POST['author'];
 
-                $host = "localhost";
-                $user = "root";
-                $password = "root";
-                $dbname = "socialapp";
+            try {
+                $sql = "INSERT INTO post (
+        caption,
+        location,
+        tags,
+        image,
+        author
+      ) VALUES (
+        :caption,
+        :location,
+        :tags,
+        :image,
+        :author
+      );";
+                $statementCreateOne = $connection->prepare($sql);
 
-                $con = mysqli_connect($host, $user, $password, $dbname);
+                $statementCreateOne->bindParam(':caption', $caption);
+                $statementCreateOne->bindParam(':location', $location);
+                $statementCreateOne->bindParam(':tags', $tags);
+                $statementCreateOne->bindParam(':image', $image);
+                $statementCreateOne->bindParam(':author', $author);
 
-                if (!$con) {
-                    die("La connexion a échouée: " . mysqli_connect_error());
+                if ($statementCreateOne->execute()) {
+                    // Post created successfully on mysql db
+                    $response = ["status" => 1, "message" => "Post crée avec succès!"];
                 }
-
-                $sql = "insert into images (image) values ('$upload_name')";
-                mysqli_query($con, $sql);
-            } else {
-                $response = array(
-                    "status" => "error",
-                    "error" => true,
-                    "message" => "Erreur lors du téléchargement de l'image!"
-                );
+            } catch (PDOException $e) {
+                // Issue with the image
+                die("La requete a échouée: " . $e->getMessage());
+                $response = ["status" => 0, "message" => "Erreur lors du téléchargement de l'image!"];
             }
         }
-    } else {
-        $response = array(
-            "status" => "error",
-            "error" => true,
-            "message" => "Aucune image n'a été transmise!"
-        );
+        // Issue with the image
+        elseif ($error > 0) {
+            $response = ["status" => 0, "message" => "Erreur lors du téléchargement de l'image!"];
+        }
+        // Issue with the post
+        else {
+            $response = ["status" => 0, "message" => "Erreur lors de la création du post!"];
+        }
+        echo json_encode($response);
     }
-    // for the rest remain to fix issues
-    $newUser = json_decode(file_get_contents("php://input"));
-    $sql = "INSERT INTO post(idpost, caption, file, location, tags, author) VALUES(null, :caption, :file, :location, :tags, :author)";
-    $stmt = $connection->prepare($sql);
-    $stmt->bindParam(':caption', $newUser->caption);
-    $stmt->bindParam(':file', $newUser->file);
-    $stmt->bindParam(':location', $newUser->location);
-    $stmt->bindParam(':tags', $newUser->tags);
-    $stmt->bindParam(':author', $newUser->author);
-    if ($stmt->execute()) {
-        $response = ['status' => 1, 'message' => 'Post crée !'];
-    } else {
-        $response = ['status' => 0, 'message' => "Erreur lors de la création du post !"];
-    }
-    echo json_encode($fileResponse);
-
-    echo json_encode($response);
 }

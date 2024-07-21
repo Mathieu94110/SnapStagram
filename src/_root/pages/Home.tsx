@@ -30,7 +30,7 @@ const Home = () => {
                         <h2 className="h3-bold md:h2-bold text-left w-full">Home Feed</h2>
                         {isPostLoading && !posts ? (
                             <Loader />
-                        ) : (
+                        ) : posts && posts.length > 0 ? (
                             <ul className="flex flex-col flex-1 gap-9 w-full ">
                                 {posts?.data.map((post: INewPost) => (
                                     <li key={post.idpost} className="flex justify-center w-full">
@@ -38,7 +38,7 @@ const Home = () => {
                                     </li>
                                 ))}
                             </ul>
-                        )}
+                        ) : null}
                     </div>
                 </div>
             </div>

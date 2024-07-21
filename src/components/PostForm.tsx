@@ -28,7 +28,7 @@ const PostValidation = z.object({
     caption: z.string().min(5, { message: "Minimum 5 caractères" }).max(200, { message: "Maximum 200 caractères" }),
     file: z
         .instanceof(File)
-        .optional()
+        // .optional()
         .refine(
             (file) => !file || file.size !== 0 || file.size <= MAX_FILE_SIZE,
             `Max image size is ${MAX_FILE_SIZE / 1000}MB`
@@ -62,9 +62,9 @@ const PostForm = ({ post, action }: PostFormProps) => {
             if (user.iduser) {
                 const formData = new FormData();
                 formData.append('caption', value.caption)
-                formData.append('file', value.file!)
                 formData.append('location', value.location)
                 formData.append('tags', value.tags)
+                formData.append('file', value.file!)
                 formData.append('author', user.iduser)
                 const response = await createPost(formData);
                 if (response.status && response.status === 1) {
