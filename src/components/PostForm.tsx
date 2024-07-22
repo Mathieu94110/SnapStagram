@@ -68,7 +68,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
                 formData.append('author', user.iduser)
                 const response = await createPost(formData);
                 if (response.status && response.status === 1) {
-                    navigate("/")
+                    navigate("/home")
                 }
             }
         } catch (error) {

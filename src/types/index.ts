@@ -18,9 +18,9 @@ export type INewUser = {
 export type INewPost = {
     idpost?: string;
     caption: string;
-    file?: File;
     location: string;
     tags: string;
+    image: Blob;
     author: number
 };
 

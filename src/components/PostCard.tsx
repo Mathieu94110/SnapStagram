@@ -62,13 +62,11 @@ const PostCard = ({ post }: { post: INewPost }) => {
                 </div>
 
                 <img
-                    src={post.file.slice(5) || "/public/assets/images/profile-placeholder.svg"}
+                    src={`http://localhost:8888/api/${JSON.stringify(post.image).slice(4, -1)}` || "/public/assets/images/profile-placeholder.svg"}
                     alt="post image"
                     className="post-card_img"
                 />
             </Link>
-
-            {/* <PostStats post={post} userId={user.iduser} /> */}
         </div>
     );
 };

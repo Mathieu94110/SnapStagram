@@ -13,24 +13,25 @@ const Home = () => {
         isError: isErrorPosts,
     } = useGetUserPosts();
     return (
-        <div className='flex w-full h-screen items-center justify-center'>
-            <h1>Bonjour {user.name.charAt(0).toUpperCase() + user.name.slice(1)}</h1>
-
-            {isErrorPosts ?
+        <div className='flex flex-col w-full items-center justify-center mb-[5vh]'>
+            <div className='h-[10vh] my-[2.5vh] flex flex-col justify-between'>
+                <h1 className="h3-bold md:h2-bold text-center w-full">Bonjour <span className='text-primary-500'>{user.name.charAt(0).toUpperCase() + user.name.slice(1)}</span></h1>
+                {!isErrorPosts && <h2 className="h4-bold md:h3-bold text-center w-full">Voici les derniers posts</h2>}
+            </div>
+            {isErrorPosts &&
                 <div className="flex flex-1">
                     <div className="home-container">
                         <p className="body-medium text-light-1">Une erreur est survenue lors de la récupération des posts</p>
                     </div>
                 </div>
-                : null
             }
             <div className="flex flex-1">
                 <div className="home-container">
                     <div className="home-posts">
-                        <h2 className="h3-bold md:h2-bold text-left w-full">Home Feed</h2>
+
                         {isPostLoading && !posts ? (
                             <Loader />
-                        ) : posts && posts.length > 0 ? (
+                        ) : posts?.data?.length > 0 ? (
                             <ul className="flex flex-col flex-1 gap-9 w-full ">
                                 {posts?.data.map((post: INewPost) => (
                                     <li key={post.idpost} className="flex justify-center w-full">
@@ -38,7 +39,7 @@ const Home = () => {
                                     </li>
                                 ))}
                             </ul>
-                        ) : null}
+                        ) : <h2 className="h4-bold md:h3-bold text-center w-full">Il n'éxiste pas encore de post</h2>}
                     </div>
                 </div>
             </div>
