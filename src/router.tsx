@@ -5,6 +5,7 @@ import AuthLayout from "@/_auth/AuthLayout.js";
 import SigninForm from "@/_auth/forms/SignInForm.js";
 import SignupForm from "@/_auth/forms/SignUpForm.js";
 import CreatePost from "@/_root/pages/CreatePost.js";
+import EditPost from "./_root/pages/EditPost";
 
 const router = createBrowserRouter([
     {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
             {
                 path: '/create-Post',
                 element: <CreatePost />
+            },
+            {
+                path: '/update-post/:id',
+                element: <EditPost />
             },
         ]
     },

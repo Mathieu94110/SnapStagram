@@ -157,7 +157,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
                         className="shad-button_primary whitespace-nowrap"
                         disabled={isLoadingCreate}>
                         {isLoadingCreate && <Loader />}
-                        {action} un post
+                        {action} le post
                     </Button>
                 </div>
             </form>

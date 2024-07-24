@@ -1,4 +1,4 @@
-import { createPost, getPosts } from '@/apis/posts'
+import { createPost, getPosts, getPostById } from '@/apis/posts'
 import {
     useMutation,
     useQuery,
@@ -52,3 +52,11 @@ export function useGetUserPosts() {
         queryFn: getPosts,
     });
 }
+
+export const useGetPostById = (postId?: string) => {
+    return useQuery({
+        queryKey: ['getPostById', postId],
+        queryFn: () => getPostById(postId),
+        enabled: !!postId,
+    });
+};

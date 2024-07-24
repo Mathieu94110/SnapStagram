@@ -33,3 +33,19 @@ export async function getPosts() {
         console.log(error);
     }
 }
+
+export async function getPostById(postId?: string) {
+    console.log(postId);
+    if (!postId) throw Error;
+
+    const response = await fetch(`${API_POSTS}?id=${postId}`, {
+        headers: {
+            "Accept": "application/json",
+            'Content-Type': 'application/json',
+        },
+    });
+    const data = response.json();
+    if (!data) throw Error;
+    return data;
+
+}

@@ -17,15 +17,21 @@ $upload_dir = '../uploads';
 $upload_name = '';
 
 if ($method === 'GET') {
-
-    $posts = $postDB->fetchAll();
-
-    if (count($posts)) {
-        $response = ['status' => 1, 'data' => $posts];
+    $id = $_GET['id'] ?? '';
+    if ($id) {
+        echo $id;
+        //     // $apost = $post->fetchOne($id);
+        // }
     } else {
-        $response = ['status' => 0, 'message' => "Aucun post trouvé !"];
+        $posts = $postDB->fetchAll();
+
+        if (count($posts)) {
+            $response = ['status' => 1, 'data' => $posts];
+        } else {
+            $response = ['status' => 0, 'message' => "Aucun post trouvé !"];
+        }
+        echo json_encode($response);
     }
-    echo json_encode($response);
 }
 
 if ($method === 'POST') {
