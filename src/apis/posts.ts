@@ -1,7 +1,7 @@
-import { API_CREATE_POST, API_GET_POSTS } from "@/constants"
+import { API_POSTS } from "@/constants"
 
 export async function createPost(newPost: FormData) {
-    const response = await fetch(API_CREATE_POST, {
+    const response = await fetch(API_POSTS, {
         method: 'POST',
         body: newPost,
     });
@@ -20,7 +20,7 @@ export async function createPost(newPost: FormData) {
 
 export async function getPosts() {
     try {
-        const response = await fetch(API_GET_POSTS, {
+        const response = await fetch(API_POSTS, {
             headers: {
                 "Accept": "application/json",
                 'Content-Type': 'application/json',
