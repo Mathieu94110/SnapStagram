@@ -3,7 +3,6 @@ import PostCard from '@/components/PostCard';
 import { useUserContext } from '@/context/AuthContextProvider'
 import { useGetUserPosts } from '@/lib/react-query/queries';
 import { INewPost } from '@/types';
-import { useEffect } from 'react';
 
 const Home = () => {
     const { user } = useUserContext()

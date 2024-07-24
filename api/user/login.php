@@ -4,13 +4,8 @@ ini_set('display_errors', 1);
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
 
-//// These lines will be refactored in a short time
-$server = getenv('DB_HOST');
-$dbname = getenv('DB_NAME');
-$user = getenv('DB_USER');
-$pass = getenv('DB_PASS');
-$connection = new mysqli($server, $user, $pass, $dbname);
-////
+require_once '../database/database.php';
+$authDB = require_once '../database/security.php';
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === 'POST') {
@@ -18,23 +13,19 @@ if ($method === 'POST') {
     $decodedData = json_decode($encodeddData, true);
     $email = $decodedData['email'];
     $password = $decodedData['password'];
-    $sql = "SELECT * FROM user WHERE email='$email'";
-    $res = mysqli_query($connection, $sql);
 
-    if ($res) {
-        if (mysqli_num_rows($res) !== 0) {
-            $userInfos = mysqli_fetch_assoc($res);
-            $hashedPassword = $userInfos['password'];
-            if (password_verify($password, $hashedPassword)) {
-                $response = ['status' => 1, 'data' => $userInfos];
-            } else {
-                $response = ['status' => 0, 'message' => "Mot de passe incorrect !"];
-            }
-        } else {
+    if ($email !== '') {
+        $user = $authDB->getUserFromEmail($email);
+        $response = null;
+        if (!$user) {
             $response = ['status' => 0, 'message' => "L'adresse mail n'éxiste pas !"];
+        } else {
+            if (!password_verify($password, $user['password'])) {
+                $response = ['status' => 0, 'message' => "Mot de passe incorrect !"];
+            } else {
+                $authDB->login($user['iduser']);
+            }
         }
-    } else {
-        $response = ['status' => 0, 'message' => "Problème serveur !"];
+        if ($response) echo json_encode($response);
     }
-    echo json_encode($response);
 }
