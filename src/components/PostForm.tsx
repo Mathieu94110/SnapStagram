@@ -48,10 +48,10 @@ const PostForm = ({ post, action }: PostFormProps) => {
     const form = useForm<z.infer<typeof PostValidation>>({
         resolver: zodResolver(PostValidation),
         defaultValues: {
-            caption: "",
-            file: undefined,
-            location: "",
-            tags: "",
+            caption: post ? post.data.caption : "",
+            file: post.imageUrl ? post.data.imageUrl : undefined,
+            location: post ? post.data.location : "",
+            tags: post ? Array.isArray(post.data.tags) ? post.data.tags.join(",") : post.data.tags : "",
         },
     });
     const { mutateAsync: createPost, isLoading: isLoadingCreate } =
@@ -107,7 +107,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
                             <label className="shad-form_label">Ajouter des photos</label>
                             <FileUploader
                                 fieldChange={field.onChange}
-                                mediaUrl={post?.imageUrl}
+                                mediaUrl={`http://localhost:8888/api/${JSON.stringify(post?.data.image).slice(4, -1)}`}
                             />
                             <FormMessage className="shad-form_message" />
                         </FormItem>

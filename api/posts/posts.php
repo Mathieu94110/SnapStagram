@@ -11,17 +11,17 @@ require '../database/database.php';
 $authDB = require  '../database/security.php';
 $postDB = require_once '../database/models/postDB.php';
 
-
+$currentUser = $authDB->isLoggedin();
 $method = $_SERVER['REQUEST_METHOD'];
 $upload_dir = '../uploads';
 $upload_name = '';
 
 if ($method === 'GET') {
-    $id = $_GET['id'] ?? '';
-    if ($id) {
-        echo $id;
-        //     // $apost = $post->fetchOne($id);
-        // }
+    if (isset($_GET['post_id'])) {
+        $id = $_GET['post_id'] ?? '';
+        $post = $postDB->fetchOne($id);
+        $response = ['status' => 1, 'data' => $post];
+        echo json_encode($response);
     } else {
         $posts = $postDB->fetchAll();
 
@@ -32,8 +32,8 @@ if ($method === 'GET') {
         }
         echo json_encode($response);
     }
+    // }
 }
-
 if ($method === 'POST') {
 
     // for image 
