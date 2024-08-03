@@ -13,11 +13,12 @@ import {
 } from '@/components/ui'
 import FileUploader from "./FileUploader"
 import { useUserContext } from '@/context/AuthContextProvider'
-import { useCreatePost } from '@/lib/react-query/queries'
+import { useCreatePost, useUpdatePost } from '@/lib/react-query/queries'
 import Loader from "./Loader"
+import { INewPostData } from "@/types"
 
 type PostFormProps = {
-    post?: any,
+    post?: INewPostData,
     action: "Créer" | "Mettre à jour";
 };
 
@@ -28,7 +29,7 @@ const PostValidation = z.object({
     caption: z.string().min(5, { message: "Minimum 5 caractères" }).max(200, { message: "Maximum 200 caractères" }),
     file: z
         .instanceof(File)
-        // .optional()
+        .optional()
         .refine(
             (file) => !file || file.size !== 0 || file.size <= MAX_FILE_SIZE,
             `Max image size is ${MAX_FILE_SIZE / 1000}MB`
@@ -49,35 +50,47 @@ const PostForm = ({ post, action }: PostFormProps) => {
         resolver: zodResolver(PostValidation),
         defaultValues: {
             caption: post ? post.data.caption : "",
-            file: post.imageUrl ? post.data.imageUrl : undefined,
+            file: undefined,
             location: post ? post.data.location : "",
             tags: post ? Array.isArray(post.data.tags) ? post.data.tags.join(",") : post.data.tags : "",
         },
     });
     const { mutateAsync: createPost, isLoading: isLoadingCreate } =
         useCreatePost();
+    const { mutateAsync: updatePost, isLoading: isLoadingUpdate } =
+        useUpdatePost();
 
     const handleSubmit = async (value: z.infer<typeof PostValidation>) => {
-        try {
-            if (user.iduser) {
-                const formData = new FormData();
-                formData.append('caption', value.caption)
-                formData.append('location', value.location)
-                formData.append('tags', value.tags)
-                formData.append('file', value.file!)
-                formData.append('author', user.iduser)
-                const response = await createPost(formData);
-                if (response.status && response.status === 1) {
-                    navigate("/home")
-                }
-            }
-        } catch (error) {
-            let message = "Erreur lors de la création du post";
-            if (error instanceof Error) message = error.message
-            console.error(message)
+        const formData = new FormData();
+        if (post) {
+            formData.append('idpost', post.data.idpost!);
+        };
+        formData.append('caption', value.caption)
+        formData.append('location', value.location)
+        formData.append('tags', value.tags)
+        if (value.file) {
+            formData.append('file', value.file)
         }
-
-
+        formData.append('author', user.iduser);
+        if (post && action === "Mettre à jour") {
+            const response = await updatePost(formData);
+            if (response.status && response.status === 1) {
+                console.log('CEST MIS A JOUR');
+            }
+        } else {
+            try {
+                if (user.iduser) {
+                    const response = await createPost(formData);
+                    if (response.status && response.status === 1) {
+                        navigate("/home")
+                    }
+                }
+            } catch (error) {
+                let message = "Erreur lors de la création du post";
+                if (error instanceof Error) message = error.message
+                console.error(message)
+            }
+        }
     };
     return (
         <Form {...form}>

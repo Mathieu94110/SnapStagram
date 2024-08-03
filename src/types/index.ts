@@ -16,13 +16,16 @@ export type INewUser = {
 };
 
 export type INewPost = {
-    idpost?: string;
+    idpost?: number;
     caption: string;
     location: string;
     tags: string;
     image: Blob;
     author: number
 };
+export type INewPostData = {
+    data: INewPost;
+}
 
 export type INavLink = {
     imgURL: string;

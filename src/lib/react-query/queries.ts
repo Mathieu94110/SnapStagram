@@ -1,10 +1,10 @@
-import { createPost, getPosts, getPostById } from '@/apis/posts'
+import { createPost, updatePost, getPosts, getPostById } from '@/apis/posts'
 import {
     useMutation,
     useQuery,
     useQueryClient,
 } from "@tanstack/react-query";
-import { INewUser, INewPost } from '@/types';
+import { INewUser } from '@/types';
 import { createUser, logUser } from '@/apis/users'
 
 
@@ -37,7 +37,7 @@ export const useSignInAccount = () => {
 export const useCreatePost = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (post: any) => createPost(post),
+        mutationFn: (post: FormData) => createPost(post),
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: ['getRecentPosts'],
@@ -58,5 +58,17 @@ export const useGetPostById = (postId?: string) => {
         queryKey: ['getPostById', postId],
         queryFn: () => getPostById(postId),
         enabled: !!postId,
+    });
+};
+
+export const useUpdatePost = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (post: FormData) => updatePost(post),
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({
+                queryKey: ["getPostById", data.idpost],
+            });
+        },
     });
 };

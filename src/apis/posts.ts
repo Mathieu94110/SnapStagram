@@ -49,3 +49,22 @@ export async function getPostById(postId?: string) {
         console.log(error);
     }
 }
+
+
+export async function updatePost(newPost: FormData) {
+    const response = await fetch(`${API_POSTS}?post_id=${newPost.get("idpost")}`, {
+        method: 'POST',
+        body: newPost,
+    });
+    const body = await response.json();
+
+    if (response.ok) {
+        return body;
+    } else {
+        if (body) {
+            throw body;
+        } else {
+            throw new Error('Error api updatePost');
+        }
+    }
+}
