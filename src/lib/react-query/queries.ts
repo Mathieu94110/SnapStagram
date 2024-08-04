@@ -1,4 +1,4 @@
-import { createPost, updatePost, getPosts, getPostById, getUserPosts } from '@/apis/posts'
+import { createPost, updatePost, getPosts, getPostById, getUserPosts, deletePost } from '@/apis/posts'
 import {
     useMutation,
     useQuery,
@@ -78,5 +78,18 @@ export const useGetUserPosts = (userId: number) => {
         queryKey: ['getUserPosts', userId],
         queryFn: () => getUserPosts(userId),
         enabled: !!userId,
+    });
+};
+
+export const useDeletePost = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ postId }: { postId?: number }) =>
+            deletePost(postId!),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['getRecentPosts'],
+            });
+        },
     });
 };

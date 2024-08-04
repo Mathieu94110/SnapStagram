@@ -2,6 +2,7 @@
 class PostDB
 {
   private PDOStatement $statementCreateOne;
+  private PDOStatement $statementDeleteOne;
   private PDOStatement $statementUpdateOneWithImg;
   private PDOStatement $statementUpdateOneWithoutImg;
   private PDOStatement $statementReadOne;
@@ -28,6 +29,7 @@ class PostDB
         :authorId
       )
     ');
+    $this->statementDeleteOne = $pdo->prepare('DELETE FROM post WHERE idpost=:id');
     $this->statementReadOne = $pdo->prepare('SELECT * FROM post LEFT JOIN user ON post.authorId = user.iduser WHERE post.idpost=:id');
     $this->statementUpdateOneWithImg = $pdo->prepare('
         UPDATE post
@@ -80,6 +82,13 @@ class PostDB
       $response = ['status' => 1, 'message' => 'Post crée avec succès !'];
       echo json_encode($response);
     }
+  }
+
+  public function deleteOne(int $id): int
+  {
+    $this->statementDeleteOne->bindValue(':id', $id);
+    $this->statementDeleteOne->execute();
+    return $id;
   }
 
   public function updateOne($post): void

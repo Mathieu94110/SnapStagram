@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import { INewPost } from "@/types";
+import { Button } from "../ui";
+import { useUserContext } from "@/context/AuthContextProvider";
+import { useDeletePost } from "@/lib/react-query/queries";
 
 type GridPostListProps = {
     posts: INewPost[];
@@ -10,6 +13,12 @@ const GridPostList = ({
     posts,
     showUser = true,
 }: GridPostListProps) => {
+    const { mutate: deletePost } = useDeletePost();
+    const { user } = useUserContext();
+
+    const handleDeletePost = (id: number) => {
+        deletePost({ postId: id });
+    };
 
     return (
         <ul className="grid-container">
@@ -34,6 +43,18 @@ const GridPostList = ({
                                 <p className="line-clamp-1">{post.author}</p>
                             </div>
                         )}
+                        <Button
+                            onClick={() => handleDeletePost(post.idpost!)}
+                            variant="ghost"
+                            className={`ost_details-delete_btn ${user.iduser !== post?.authorId && "hidden"
+                                }`}>
+                            <img
+                                src={"/public/assets/images/delete.svg"}
+                                alt="delete"
+                                width={24}
+                                height={24}
+                            />
+                        </Button>
                     </div>
                 </li>
             ))}

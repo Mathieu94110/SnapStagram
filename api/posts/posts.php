@@ -97,3 +97,10 @@ if ($method === 'POST') {
         }
     }
 }
+if ($method === 'DELETE') {
+    $id = $_GET['post_id'] ?? '';
+    $post = $postDB->fetchOne($id);
+    if ($post['authorId'] === $currentUser['id']) {
+        $postDB->deleteOne($id);
+    }
+}

@@ -84,3 +84,20 @@ export async function getUserPosts(userId: number) {
         console.log(error);
     }
 }
+
+export async function deletePost(postId: number) {
+    try {
+        const response = await fetch(`${API_POSTS}?post_id=${postId}`, {
+            method: 'DELETE',
+            headers: {
+                "Accept": "application/json",
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = response.json();
+        if (!data) throw Error;
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}
