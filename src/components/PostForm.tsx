@@ -71,7 +71,9 @@ const PostForm = ({ post, action }: PostFormProps) => {
         if (value.file) {
             formData.append('file', value.file)
         }
-        formData.append('author', user.iduser);
+        formData.append('author', user.userName);
+        formData.append('authorId', user.iduser);
+
         if (post && action === "Mettre à jour") {
             const response = await updatePost(formData);
             if (response.status && response.status === 1) {
@@ -120,7 +122,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
                             <label className="shad-form_label">Ajouter des photos</label>
                             <FileUploader
                                 fieldChange={field.onChange}
-                                mediaUrl={`http://localhost:8888/api/${JSON.stringify(post?.data.image).slice(4, -1)}`}
+                                mediaUrl={post?.data?.image ? `http://localhost:8888/api/${JSON.stringify(post?.data.image).slice(4, -1)}` : ''}
                             />
                             <FormMessage className="shad-form_message" />
                         </FormItem>

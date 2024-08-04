@@ -1,4 +1,4 @@
-import { createPost, updatePost, getPosts, getPostById } from '@/apis/posts'
+import { createPost, updatePost, getPosts, getPostById, getUserPosts } from '@/apis/posts'
 import {
     useMutation,
     useQuery,
@@ -46,7 +46,7 @@ export const useCreatePost = () => {
     });
 };
 
-export function useGetUserPosts() {
+export function useGetPosts() {
     return useQuery({
         queryKey: ['getPosts'],
         queryFn: getPosts,
@@ -70,5 +70,13 @@ export const useUpdatePost = () => {
                 queryKey: ["getPostById", data.idpost],
             });
         },
+    });
+};
+
+export const useGetUserPosts = (userId: number) => {
+    return useQuery({
+        queryKey: ['getUserPosts', userId],
+        queryFn: () => getUserPosts(userId),
+        enabled: !!userId,
     });
 };

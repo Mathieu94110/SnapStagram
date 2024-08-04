@@ -22,9 +22,18 @@ if ($method === 'GET') {
         $post = $postDB->fetchOne($id);
         $response = ['status' => 1, 'data' => $post];
         echo json_encode($response);
+    } elseif (isset($_GET['author_id'])) {
+        //get user posts case
+        $author = intval($_GET['author_id']);
+        $userPosts = $postDB->fetchUserPosts($author);
+        if (count($userPosts)) {
+            $response = ['status' => 1, 'data' => $userPosts];
+        } else {
+            $response = ['status' => 0, 'message' => "Aucun post trouvé pour cet utilisateur !"];
+        }
+        echo json_encode($response);
     } else {
         $posts = $postDB->fetchAll();
-
         if (count($posts)) {
             $response = ['status' => 1, 'data' => $posts];
         } else {
@@ -33,26 +42,26 @@ if ($method === 'GET') {
         echo json_encode($response);
     }
 }
-
 if ($method === 'POST') {
-    // we set common queries values
+
     $caption = $_POST['caption'];
     $location = $_POST['location'];
     $tags = $_POST['tags'];
     $author = $_POST['author'];
+    $authorId = $_POST['authorId'];
 
     $post['caption'] = $caption;
     $post['location'] = $location;
     $post['tags'] = $tags;
     $post['author'] = $author;
-    //
+    $post['authorId'] = $authorId;
+
     if (empty($_FILES['file'])) {
-        // Post without new image in this case we only adding idpost value to common queries values for update
         $id = $_GET['post_id'] ?? '';
         $post['idpost'] = $id;
         $postDB->updateOne($post);
     } else {
-        // Post with new image 
+        // post with new image 
         $file_name = $_FILES["file"]["name"];
         $file_tmp_name = $_FILES["file"]["tmp_name"];
         $error = $_FILES["file"]["error"];
@@ -63,8 +72,14 @@ if ($method === 'POST') {
             if (move_uploaded_file($file_tmp_name, $upload_name)) {
                 $image = $upload_name;
                 if (isset($_GET['post_id'])) {
-                    // We adding idpost value and new image value for update
+                    //update post case
                     $id = $_GET['post_id'] ?? '';
+                    $post['idpost'] = $id;
+                    $post['image'] = $image;
+                    $postDB->updateOne($post);
+                } elseif (isset($_GET['user_id'])) {
+                    //get user posts case
+                    $userId = $_GET['user_id'] ?? '';
                     $post['idpost'] = $id;
                     $post['image'] = $image;
                     $postDB->updateOne($post);
@@ -74,7 +89,8 @@ if ($method === 'POST') {
                         'location' => $location,
                         'tags' => $tags,
                         'image' => $image,
-                        'author' => $author
+                        'author' => $author,
+                        'authorId' => $authorId
                     ]);
                 }
             }

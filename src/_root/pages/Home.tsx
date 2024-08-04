@@ -1,7 +1,7 @@
 import Loader from '@/components/Loader';
 import PostCard from '@/components/PostCard';
 import { useUserContext } from '@/context/AuthContextProvider'
-import { useGetUserPosts } from '@/lib/react-query/queries';
+import { useGetPosts } from '@/lib/react-query/queries';
 import { INewPost } from '@/types';
 
 const Home = () => {
@@ -10,7 +10,7 @@ const Home = () => {
         data: posts,
         isLoading: isPostLoading,
         isError: isErrorPosts,
-    } = useGetUserPosts();
+    } = useGetPosts();
     return (
         <div className='flex flex-col w-full items-center justify-center mb-[5vh]'>
             <div className='h-[10vh] my-[2.5vh] flex flex-col justify-between'>
@@ -25,9 +25,8 @@ const Home = () => {
                 </div>
             }
             <div className="flex flex-1">
-                <div className="home-container">
+                <div className="home-posts-container">
                     <div className="home-posts">
-
                         {isPostLoading && !posts ? (
                             <Loader />
                         ) : posts?.data?.length > 0 ? (

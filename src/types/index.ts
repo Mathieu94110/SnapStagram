@@ -21,7 +21,8 @@ export type INewPost = {
     location: string;
     tags: string;
     image: Blob;
-    author: number
+    author: string
+    authorId: number,
 };
 export type INewPostData = {
     data: INewPost;

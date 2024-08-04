@@ -7,13 +7,13 @@ import { INewPost } from "@/types";
 const PostCard = ({ post }: { post: INewPost }) => {
     const { user } = useUserContext()
 
-    if (!post.author) return;
+    if (!post.authorId) return;
 
     return (
         <div className="post-card">
             <div className="flex-between">
                 <div className="flex items-center gap-3">
-                    <Link to={`/profile/${post.author}`}>
+                    <Link to={`/profile/${post.authorId}`}>
                         <img
                             src="/public/assets/images/profile-placeholder.svg"
                             alt="creator"
@@ -23,7 +23,7 @@ const PostCard = ({ post }: { post: INewPost }) => {
 
                     <div className="flex flex-col">
                         <p className="base-medium lg:body-bold text-light-1">
-                            Name
+                            {post.author}
                         </p>
                         <div className="flex-center gap-2 text-light-3">
                             <p className="subtle-semibold lg:small-regular ">
@@ -39,7 +39,7 @@ const PostCard = ({ post }: { post: INewPost }) => {
 
                 <Link
                     to={`/update-post/${post.idpost}`}
-                    className={`${user.iduser !== post.author && "hidden"}`}>
+                    className={`${user.iduser !== post.authorId && "hidden"}`}>
                     <img
                         src={"/public/assets/images/edit.svg"}
                         alt="edit"

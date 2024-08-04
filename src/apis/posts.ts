@@ -68,3 +68,19 @@ export async function updatePost(newPost: FormData) {
         }
     }
 }
+
+export async function getUserPosts(userId: number) {
+    try {
+        const response = await fetch(`${API_POSTS}?author_id=${userId}`, {
+            headers: {
+                "Accept": "application/json",
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = response.json();
+        if (!data) throw Error;
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}

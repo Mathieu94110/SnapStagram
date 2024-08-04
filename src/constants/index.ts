@@ -22,7 +22,7 @@ export const sidebarLinks = [
     },
     {
         imgURL: "/public/assets/images/bookmark.svg",
-        route: "/saved",
+        route: "/user-posts",
         label: "Enregistrés",
     },
     {
