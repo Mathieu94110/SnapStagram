@@ -10,13 +10,14 @@ const LeftSidebar = () => {
     const { pathname } = useLocation();
     const { user, setUser, setIsAuthenticated, isLoading } = useUserContext();
 
-    const handleSignOut = async (
+    const handleSignOut = (
         e: React.MouseEvent<HTMLButtonElement, MouseEvent>
     ) => {
         e.preventDefault();
         setIsAuthenticated(false);
         setUser(INITIAL_USER);
-        navigate("/sign-in");
+        localStorage.removeItem("availability");
+        navigate("/connexion");
     };
 
     return (

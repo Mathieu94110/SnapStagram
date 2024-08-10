@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { INewUser } from "@/types";
+import { useGetCurrentUserById } from "@/lib/react-query/queries";
 
 export const INITIAL_USER = {
   iduser: "",
@@ -33,30 +34,41 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
   const [user, setUser] = useState<INewUser>(INITIAL_USER);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [userId, setUserId] = useState<null | number>(null);
+  const {
+    data: userInfos
+  } = useGetCurrentUserById(userId);
+
+  useEffect(() => {
+    if (userInfos && userInfos.data) {
+      setUser(userInfos.data);
+      setIsAuthenticated(true);
+      setIsLoading(false)
+    }
+  }, [userInfos])
 
   const checkAuthUser = async () => {
-    // setIsLoading(true);
-    // try {
-    //   const currentAccount = await getCurrentUser();
-    //   if (currentAccount) {
-    //     setUser({
-    //       id: currentAccount.$id,
-    //       name: currentAccount.name,
-    //       username: currentAccount.username,
-    //       email: currentAccount.email,
-    //     });
-    //     setIsAuthenticated(true);
-
-    //     return true;
-    //   }
-
-    //   return false;
-    // } catch (error) {
-    //   console.error(error);
-    //   return false;
-    // } finally {
-    //   setIsLoading(false);
-    // }
+    setIsLoading(true);
+    const storedUserData = localStorage.getItem('availability');
+    if (storedUserData) {
+      //user info on local storage case
+      const userData = JSON.parse(storedUserData)
+      // On below we compare the expiration date on localStorage of user authentication 
+      if (userData.exp > Math.floor(new Date().getTime() / 1000)) {
+        // user was authenticated less than an hour ago and he not be logged out
+        setUserId(userData.user_id);
+        return true
+      } else {
+        // user was authenticated over an hour ago, he has to log in again
+        setIsLoading(false)
+        localStorage.removeItem("availability");
+        return false
+      }
+    } else {
+      // no user saved on localStorage
+      setIsLoading(false)
+      return false
+    }
   };
 
   useEffect(() => {

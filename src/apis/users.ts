@@ -41,3 +41,20 @@ export async function logUser(UserInfo: { email: string; password: string }) {
         }
     }
 }
+
+
+export async function getCurrentUser(userId: null | number) {
+    try {
+        const response = await fetch(`${API_LOGIN_USERS}?user_id=${userId}`, {
+            headers: {
+                "Accept": "application/json",
+                'Content-Type': 'application/json',
+            },
+        });
+        const data = response.json();
+        if (!data) throw Error;
+        return data;
+    } catch (error) {
+        console.log(error);
+    }
+}

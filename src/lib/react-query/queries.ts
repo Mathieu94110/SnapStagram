@@ -5,7 +5,7 @@ import {
     useQueryClient,
 } from "@tanstack/react-query";
 import { INewUser } from '@/types';
-import { createUser, logUser } from '@/apis/users'
+import { createUser, logUser, getCurrentUser } from '@/apis/users'
 
 
 // ============================================================
@@ -25,11 +25,14 @@ export const useSignInAccount = () => {
     });
 };
 
-// export const useSignOutAccount = () => {
-//     return useMutation({
-//         mutationFn: signOutAccount,
-//     });
-// };
+export const useGetCurrentUserById = (userId: any) => {
+    return useQuery({
+        queryKey: ['getCurrentUserById', userId],
+        queryFn: () => getCurrentUser(userId),
+        enabled: Boolean(userId),
+    });
+};
+
 // ============================================================
 // POST QUERIES
 // ============================================================

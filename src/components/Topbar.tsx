@@ -1,10 +1,21 @@
-
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
-import { useUserContext } from "@/context/AuthContextProvider";
+import { useUserContext, INITIAL_USER } from "@/context/AuthContextProvider";
 
 const Topbar = () => {
-    const { user } = useUserContext();
+    const { user, setUser, setIsAuthenticated } = useUserContext();
+    const navigate = useNavigate();
+
+
+    const handleSignOut = (
+        e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    ) => {
+        e.preventDefault();
+        setIsAuthenticated(false);
+        setUser(INITIAL_USER);
+        localStorage.removeItem("availability");
+        navigate("/connexion");
+    };
 
     return (
         <section className="topbar">
@@ -22,7 +33,7 @@ const Topbar = () => {
                     <Button
                         variant="ghost"
                         className="shad-button_ghost"
-                        onClick={() => { }}>
+                        onClick={(e) => handleSignOut(e)}>
                         <img src="/public/assets/images/logout.svg" alt="logout" />
                     </Button>
                     <Link to={`/profile/${user.id}`} className="flex-center gap-3">

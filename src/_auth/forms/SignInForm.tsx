@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useUserContext } from '@/context/AuthContextProvider'
@@ -17,8 +17,7 @@ type UserSigninInput = {
 }
 
 function SigninForm() {
-  const navigate = useNavigate();
-  const { setIsAuthenticated, setUser } = useUserContext()
+  const { setIsAuthenticated, setUser, isLoading: isUserLoading } = useUserContext()
   const { mutateAsync: signInAccount, isLoading } = useSignInAccount();
   const validationSchema = yup.object({
     email: yup
@@ -57,6 +56,7 @@ function SigninForm() {
         setError('generic', { type: 'generic', message });
       } else {
         setIsAuthenticated(true);
+        localStorage.setItem('availability', JSON.stringify(response.availability))
         setUser(response.data)
       }
     } catch (error) {
@@ -65,6 +65,14 @@ function SigninForm() {
       setError('generic', { type: 'generic', message });
     }
   });
+
+  if (isUserLoading) {
+    return (
+      <div className="h-screen w-full flex-center gap-2">
+        <Loader />
+      </div>
+    )
+  }
 
   return (
     <form

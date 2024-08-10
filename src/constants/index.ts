@@ -7,7 +7,7 @@ export const API_POSTS = `${BASE_POST_API_URI}/posts.php`
 export const sidebarLinks = [
     {
         imgURL: "/public/assets/images/home.svg",
-        route: "/",
+        route: "/home",
         label: "Accueil",
     },
     {

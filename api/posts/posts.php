@@ -8,10 +8,8 @@ header("Access-Control-Allow-Methods: *");
 header("Access-Control-Allow-Credentials: true");
 
 require '../database/database.php';
-$authDB = require  '../database/security.php';
 $postDB = require_once '../database/models/postDB.php';
 
-$currentUser = $authDB->isLoggedin();
 $method = $_SERVER['REQUEST_METHOD'];
 $upload_dir = '../uploads';
 $upload_name = '';
@@ -95,12 +93,5 @@ if ($method === 'POST') {
                 }
             }
         }
-    }
-}
-if ($method === 'DELETE') {
-    $id = $_GET['post_id'] ?? '';
-    $post = $postDB->fetchOne($id);
-    if ($post['authorId'] === $currentUser['id']) {
-        $postDB->deleteOne($id);
     }
 }
