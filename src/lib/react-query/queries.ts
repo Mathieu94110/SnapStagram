@@ -89,10 +89,11 @@ export const useDeletePost = () => {
     return useMutation({
         mutationFn: ({ postId }: { postId?: number }) =>
             deletePost(postId!),
-        onSuccess: () => {
+        onSuccess: (res) => {
             queryClient.invalidateQueries({
                 queryKey: ['getRecentPosts'],
             });
+            console.log(res);
         },
     });
 };

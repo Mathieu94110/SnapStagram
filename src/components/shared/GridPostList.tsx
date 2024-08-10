@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { toast } from 'react-hot-toast'
 import { INewPost } from "@/types";
 import { Button } from "../ui";
 import { useUserContext } from "@/context/AuthContextProvider";
@@ -13,11 +14,16 @@ const GridPostList = ({
     posts,
     showUser = true,
 }: GridPostListProps) => {
-    const { mutate: deletePost } = useDeletePost();
+    const { data: deleteResponse, mutate: deletePost, isSuccess, isError } = useDeletePost();
     const { user } = useUserContext();
 
-    const handleDeletePost = (id: number) => {
-        deletePost({ postId: id });
+    const handleDeletePost = async (id: number) => {
+        await deletePost({ postId: id })
+        if (isSuccess) {
+            toast.success('Post créer avec succès !');
+        } else if (isError) {
+            toast.error('Erreur survenue lors de la suppression du post !');
+        }
     };
 
     return (

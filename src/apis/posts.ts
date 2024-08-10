@@ -94,9 +94,16 @@ export async function deletePost(postId: number) {
                 'Content-Type': 'application/json',
             },
         });
-        const data = response.json();
-        if (!data) throw Error;
-        return data;
+        const body = await response.json();
+        if (response.ok) {
+            return body;
+        } else {
+            if (body) {
+                throw body;
+            } else {
+                throw new Error('Error api createUser');
+            }
+        }
     } catch (error) {
         console.log(error);
     }

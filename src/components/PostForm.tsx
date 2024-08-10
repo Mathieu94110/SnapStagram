@@ -1,6 +1,7 @@
 import * as z from "zod"
 import { useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
+import { toast } from 'react-hot-toast'
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
     Form,
@@ -77,13 +78,14 @@ const PostForm = ({ post, action }: PostFormProps) => {
         if (post && action === "Mettre à jour") {
             const response = await updatePost(formData);
             if (response.status && response.status === 1) {
-                console.log('CEST MIS A JOUR');
+                toast.success('Post mis à jour !');
             }
         } else {
             try {
                 if (user.iduser) {
                     const response = await createPost(formData);
                     if (response.status && response.status === 1) {
+                        toast.success('Post créer avec succès !');
                         navigate("/home")
                     }
                 }

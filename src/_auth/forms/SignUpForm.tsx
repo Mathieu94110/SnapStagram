@@ -1,7 +1,8 @@
+import { useNavigate, Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-hot-toast'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useNavigate, Link } from 'react-router-dom'
 import { useCreateUserAccount } from "@/lib/react-query/queries"
 import Loader from "@/components/Loader"
 
@@ -64,6 +65,7 @@ function SignupForm() {
       clearErrors();
       const response = await createUserAccount(user);
       if (response.status && response.status === 1) {
+        toast.success('Utilisateur créer avec succès !')
         navigate("/connexion")
       }
     } catch (error) {
