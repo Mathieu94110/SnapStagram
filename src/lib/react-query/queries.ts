@@ -1,10 +1,10 @@
-import { createPost, updatePost, getPosts, getPostById, getUserPosts, deletePost } from '@/apis/posts'
+import { createPost, updatePost, getPosts, getPostById, getUserPosts, deletePost, likePost } from '@/apis/posts'
 import {
     useMutation,
     useQuery,
     useQueryClient,
 } from "@tanstack/react-query";
-import { INewUser } from '@/types';
+import { TNewPost, TNewUser, TPostReturn } from '@/types';
 import { createUser, logUser, getCurrentUser } from '@/apis/users'
 
 
@@ -14,7 +14,7 @@ import { createUser, logUser, getCurrentUser } from '@/apis/users'
 
 export const useCreateUserAccount = () => {
     return useMutation({
-        mutationFn: (user: INewUser) => createUser(user),
+        mutationFn: (user: TNewUser) => createUser(user),
     });
 };
 
@@ -25,7 +25,7 @@ export const useSignInAccount = () => {
     });
 };
 
-export const useGetCurrentUserById = (userId: any) => {
+export const useGetCurrentUserById = (userId: number) => {
     return useQuery({
         queryKey: ['getCurrentUserById', userId],
         queryFn: () => getCurrentUser(userId),
@@ -89,11 +89,11 @@ export const useDeletePost = () => {
     return useMutation({
         mutationFn: ({ postId }: { postId?: number }) =>
             deletePost(postId!),
-        onSuccess: (res) => {
+        onSuccess: () => {
+            (response: TPostReturn) => response
             queryClient.invalidateQueries({
-                queryKey: ['getRecentPosts'],
+                queryKey: ['getUserPosts'],
             });
-            console.log(res);
         },
     });
 };

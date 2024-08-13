@@ -80,15 +80,21 @@ class PostDB
     $this->statementCreateOne->bindValue(':authorId', $post['authorId']);
     if ($this->statementCreateOne->execute()) {
       $response = ['status' => 1, 'message' => 'Post crée avec succès !'];
-      echo json_encode($response);
+    } else {
+      $response = ['status' => 1, 'message' => 'Echec de la création du post !'];
     }
+    echo json_encode($response);
   }
 
-  public function deleteOne(int $id): int
+  public function deleteOne(int $id): void
   {
     $this->statementDeleteOne->bindValue(':id', $id);
-    $this->statementDeleteOne->execute();
-    return $id;
+    if ($this->statementDeleteOne->execute()) {
+      $response = ['status' => 1, 'message' => 'Post supprimé avec succès !'];
+    } else {
+      $response = ['status' => 0, 'message' => 'Echec de supression du post !'];
+    }
+    echo json_encode($response);
   }
 
   public function updateOne($post): void

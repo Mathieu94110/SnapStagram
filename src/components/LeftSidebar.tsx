@@ -1,5 +1,5 @@
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { INavLink } from "@/types";
+import { TNavLink } from "@/types";
 import { sidebarLinks } from "@/constants";
 import Loader from "./Loader";
 import { Button } from "./ui/button";
@@ -51,7 +51,7 @@ const LeftSidebar = () => {
                 )}
 
                 <ul className="flex flex-col gap-6">
-                    {sidebarLinks.map((link: INavLink) => {
+                    {sidebarLinks.map((link: TNavLink) => {
                         const isActive = pathname === link.route;
 
                         return (

@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom";
 // import PostStats from "./PostStats";
 import { useUserContext } from "@/context/AuthContextProvider";
-import { INewPost } from "@/types";
+import { TNewPost } from "@/types";
+import PostStats from "@/components/shared/PostStats";
 
 
-const PostCard = ({ post }: { post: INewPost }) => {
+const PostCard = ({ post }: { post: TNewPost }) => {
     const { user } = useUserContext()
 
     if (!post.authorId) return;
@@ -67,6 +68,7 @@ const PostCard = ({ post }: { post: INewPost }) => {
                     className="post-card_img"
                 />
             </Link>
+            <PostStats post={post} userId={user.iduser!} />
         </div>
     );
 };

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { INewUser } from "@/types";
+import { TNewUser } from "@/types";
 import { useGetCurrentUserById } from "@/lib/react-query/queries";
 
 export const INITIAL_USER = {
@@ -20,9 +20,9 @@ const INITIAL_STATE = {
 };
 
 type IContextType = {
-  user: INewUser;
+  user: TNewUser;
   isLoading: boolean;
-  setUser: React.Dispatch<React.SetStateAction<INewUser>>;
+  setUser: React.Dispatch<React.SetStateAction<TNewUser>>;
   isAuthenticated: boolean;
   setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   checkAuthUser: () => Promise<boolean>;
@@ -31,7 +31,7 @@ type IContextType = {
 const AuthContext = createContext<IContextType>(INITIAL_STATE);
 
 export function AuthContextProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<INewUser>(INITIAL_USER);
+  const [user, setUser] = useState<TNewUser>(INITIAL_USER);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [userId, setUserId] = useState<null | number>(null);

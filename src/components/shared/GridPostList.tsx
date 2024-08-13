@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import { toast } from 'react-hot-toast'
-import { INewPost } from "@/types";
+import { TNewPost } from "@/types";
 import { Button } from "../ui";
 import { useUserContext } from "@/context/AuthContextProvider";
 import { useDeletePost } from "@/lib/react-query/queries";
+import { useEffect } from "react";
 
 type GridPostListProps = {
-    posts: INewPost[];
+    posts: TNewPost[];
     showUser?: boolean;
 };
 
@@ -14,17 +15,28 @@ const GridPostList = ({
     posts,
     showUser = true,
 }: GridPostListProps) => {
-    const { data: deleteResponse, mutate: deletePost, isSuccess, isError } = useDeletePost();
+    const { data: deleteResponse, mutate: deletePost, isSuccess, isError, error } = useDeletePost();
     const { user } = useUserContext();
 
     const handleDeletePost = async (id: number) => {
-        await deletePost({ postId: id })
-        if (isSuccess) {
-            toast.success('Post créer avec succès !');
-        } else if (isError) {
-            toast.error('Erreur survenue lors de la suppression du post !');
-        }
+        await deletePost({ postId: id });
     };
+
+    // on below we check the handleDeletePost result
+    useEffect(() => {
+        if (isSuccess) {
+            if (deleteResponse) {
+                deleteResponse.status === 1 ? toast.success(deleteResponse.message) : toast.error(deleteResponse.message)
+            }
+        } else if (isError) {
+            if (error instanceof Error) {
+                toast.error(error.message)
+            }
+            else {
+                toast.error('Problème survenu lors de la suppression du post')
+            }
+        }
+    }, [isSuccess, deleteResponse])
 
     return (
         <ul className="grid-container">

@@ -2,7 +2,7 @@ import Loader from '@/components/Loader';
 import PostCard from '@/components/PostCard';
 import { useUserContext } from '@/context/AuthContextProvider'
 import { useGetPosts } from '@/lib/react-query/queries';
-import { INewPost } from '@/types';
+import { TNewPost } from '@/types';
 
 const Home = () => {
     const { user } = useUserContext()
@@ -31,7 +31,7 @@ const Home = () => {
                             <Loader />
                         ) : posts?.data?.length > 0 ? (
                             <ul className="flex flex-col flex-1 gap-9 w-full ">
-                                {posts?.data.map((post: INewPost) => (
+                                {posts?.data.map((post: TNewPost) => (
                                     <li key={post.idpost} className="flex justify-center w-full">
                                         <PostCard post={post} />
                                     </li>

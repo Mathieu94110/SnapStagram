@@ -16,10 +16,10 @@ import FileUploader from "./FileUploader"
 import { useUserContext } from '@/context/AuthContextProvider'
 import { useCreatePost, useUpdatePost } from '@/lib/react-query/queries'
 import Loader from "./Loader"
-import { INewPostData } from "@/types"
+import { TNewPostData } from "@/types"
 
 type PostFormProps = {
-    post?: INewPostData,
+    post?: TNewPostData,
     action: "Créer" | "Mettre à jour";
 };
 

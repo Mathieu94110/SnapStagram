@@ -1,4 +1,4 @@
-export type IUser = {
+export type TUser = {
     iduser: number;
     name: string;
     username: string;
@@ -6,7 +6,7 @@ export type IUser = {
     save: { post: { id: string } }[];
 };
 
-export type INewUser = {
+export type TNewUser = {
     iduser?: number;
     name: string;
     userName: string;
@@ -15,7 +15,7 @@ export type INewUser = {
     generic: { generic: { message: string; }; } | null
 };
 
-export type INewPost = {
+export type TNewPost = {
     idpost?: number;
     caption: string;
     location: string;
@@ -23,13 +23,19 @@ export type INewPost = {
     image: Blob;
     author: string
     authorId: number,
+    likes: number[]
 };
-export type INewPostData = {
-    data: INewPost;
+export type TNewPostData = {
+    data: TNewPost;
 }
 
-export type INavLink = {
+export type TNavLink = {
     imgURL: string;
     route: string;
     label: string;
 };
+
+export type TPostReturn = {
+    status: number;
+    message: string
+}
