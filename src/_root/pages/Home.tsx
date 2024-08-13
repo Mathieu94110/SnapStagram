@@ -29,7 +29,7 @@ const Home = () => {
                     <div className="home-posts">
                         {isPostLoading && !posts ? (
                             <Loader />
-                        ) : posts?.data?.length > 0 ? (
+                        ) : Array.isArray(posts?.data) && posts?.data?.length > 0 ? (
                             <ul className="flex flex-col flex-1 gap-9 w-full ">
                                 {posts?.data.map((post: TNewPost) => (
                                     <li key={post.idpost} className="flex justify-center w-full">

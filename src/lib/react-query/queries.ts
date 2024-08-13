@@ -97,3 +97,27 @@ export const useDeletePost = () => {
         },
     });
 };
+
+export const useLikePost = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({
+            postId,
+            likesArray,
+        }: {
+            postId: number;
+            likesArray: number[];
+        }) => likePost(postId, likesArray),
+        onSuccess: (data: TNewPost) => {
+            queryClient.invalidateQueries({
+                queryKey: ["getPostById", data?.idpost],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["getRecentPosts"],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["getPosts"],
+            });
+        },
+    });
+};
