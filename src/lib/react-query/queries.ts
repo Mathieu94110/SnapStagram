@@ -25,7 +25,7 @@ export const useSignInAccount = () => {
     });
 };
 
-export const useGetCurrentUserById = (userId: number) => {
+export const useGetCurrentUserById = (userId: string) => {
     return useQuery({
         queryKey: ['getCurrentUserById', userId],
         queryFn: () => getCurrentUser(userId),
@@ -56,7 +56,7 @@ export function useGetPosts() {
     });
 }
 
-export const useGetPostById = (postId?: string) => {
+export const useGetPostById = (postId: string) => {
     return useQuery({
         queryKey: ['getPostById', postId],
         queryFn: () => getPostById(postId),

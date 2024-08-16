@@ -56,7 +56,7 @@ function SigninForm() {
         setError('generic', { type: 'generic', message });
       } else {
         setIsAuthenticated(true);
-        localStorage.setItem('availability', JSON.stringify(response.availability))
+        localStorage.setItem('availability', JSON.stringify(response.availability));
         setUser(response.data)
       }
     } catch (error) {

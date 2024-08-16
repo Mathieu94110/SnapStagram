@@ -3,11 +3,11 @@ import { TNewUser } from "@/types";
 import { useGetCurrentUserById } from "@/lib/react-query/queries";
 
 export const INITIAL_USER = {
-  iduser: "",
+  iduser: undefined,
   name: "",
   userName: "",
   email: "",
-  avatar: "",
+  password: ""
 };
 
 const INITIAL_STATE = {
@@ -34,7 +34,8 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
   const [user, setUser] = useState<TNewUser>(INITIAL_USER);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [userId, setUserId] = useState<null | number>(null);
+  const [userId, setUserId] = useState<string>("");
+
   const {
     data: userInfos
   } = useGetCurrentUserById(userId);
@@ -56,7 +57,7 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
       // On below we compare the expiration date on localStorage of user authentication 
       if (userData.exp > Math.floor(new Date().getTime() / 1000)) {
         // user was authenticated less than an hour ago and he not be logged out
-        setUserId(userData.user_id);
+        setUserId(String(userData.user_id));
         return true
       } else {
         // user was authenticated over an hour ago, he has to log in again

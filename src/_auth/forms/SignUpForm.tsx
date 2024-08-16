@@ -63,7 +63,8 @@ function SignupForm() {
   const submit = handleSubmit(async (user) => {
     try {
       clearErrors();
-      const response = await createUserAccount(user);
+      const { generic, ...userInfos } = user;
+      const response = await createUserAccount(userInfos);
       if (response.status && response.status === 1) {
         toast.success('Utilisateur créer avec succès !')
         navigate("/connexion")

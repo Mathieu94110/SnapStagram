@@ -12,7 +12,6 @@ export type TNewUser = {
     userName: string;
     email: string;
     password: string;
-    generic: { generic: { message: string; }; } | null
 };
 
 export type TNewPost = {
@@ -25,9 +24,19 @@ export type TNewPost = {
     authorId: number,
     likes: number[]
 };
-export type TNewPostData = {
-    data: TNewPost;
+
+export type TPostReturn = {
+    status: number;
+    message: string
 }
+
+export type TNewPostDataArray = {
+    data?: TNewPost[],
+} & TPostReturn
+
+export type TNewPostData = {
+    data?: TNewPost,
+} & TPostReturn
 
 export type TNavLink = {
     imgURL: string;
@@ -35,7 +44,3 @@ export type TNavLink = {
     label: string;
 };
 
-export type TPostReturn = {
-    status: number;
-    message: string
-}

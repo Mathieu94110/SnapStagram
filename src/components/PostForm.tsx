@@ -50,10 +50,10 @@ const PostForm = ({ post, action }: PostFormProps) => {
     const form = useForm<z.infer<typeof PostValidation>>({
         resolver: zodResolver(PostValidation),
         defaultValues: {
-            caption: post ? post.data.caption : "",
+            caption: post && post.data ? post.data.caption : "",
             file: undefined,
-            location: post ? post.data.location : "",
-            tags: post ? Array.isArray(post.data.tags) ? post.data.tags.join(",") : post.data.tags : "",
+            location: post && post.data ? post.data.location : "",
+            tags: post && post.data ? Array.isArray(post.data.tags) ? post.data.tags.join(",") : post.data.tags : "",
         },
     });
     const { mutateAsync: createPost, isLoading: isLoadingCreate } =
@@ -63,8 +63,8 @@ const PostForm = ({ post, action }: PostFormProps) => {
 
     const handleSubmit = async (value: z.infer<typeof PostValidation>) => {
         const formData = new FormData();
-        if (post) {
-            formData.append('idpost', post.data.idpost!);
+        if (post && post.data) {
+            formData.append('idpost', JSON.stringify(post.data.idpost));
         };
         formData.append('caption', value.caption)
         formData.append('location', value.location)
@@ -72,19 +72,18 @@ const PostForm = ({ post, action }: PostFormProps) => {
         if (value.file) {
             formData.append('file', value.file)
         }
-        formData.append('author', user.userName);
-        formData.append('authorId', user.iduser);
-
+        formData.append('author', JSON.stringify(user.userName));
+        formData.append('authorId', JSON.stringify(user.iduser));
         if (post && action === "Mettre à jour") {
             const response = await updatePost(formData);
-            if (response.status && response.status === 1) {
+            if (response.status === 1) {
                 toast.success('Post mis à jour !');
             }
         } else {
             try {
                 if (user.iduser) {
                     const response = await createPost(formData);
-                    if (response.status && response.status === 1) {
+                    if (response.status === 1) {
                         toast.success('Post créer avec succès !');
                         navigate("/home")
                     }
@@ -173,7 +172,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
                         type="submit"
                         className="shad-button_primary whitespace-nowrap"
                         disabled={isLoadingCreate}>
-                        {isLoadingCreate && <Loader />}
+                        {isLoadingCreate || isLoadingUpdate && <Loader />}
                         {action} le post
                     </Button>
                 </div>

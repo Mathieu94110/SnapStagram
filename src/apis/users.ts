@@ -1,60 +1,76 @@
 import { API_REGISTER_USERS, API_LOGIN_USERS } from "@/constants"
+import { TNewUser } from "@/types";
 
-export async function createUser(newUser: { name: string; userName: string; email: string; password: string; generic: { generic: { message: string; }; } | null; }) {
-    const response = await fetch(API_REGISTER_USERS, {
-        method: 'POST',
-        headers: {
-            "Accept": "application/json",
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newUser),
-    });
-    const body = await response.json();
-    if (response.ok) {
-        return body;
-    } else {
-        if (body) {
-            throw body;
+export async function createUser(newUser: TNewUser) {
+    try {
+        const response = await fetch(API_REGISTER_USERS, {
+            method: 'POST',
+            headers: {
+                "Accept": "application/json",
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newUser),
+        });
+        const body = await response.json();
+        if (response.ok) {
+            return body;
         } else {
-            throw new Error('Error api createUser');
+            if (body) {
+                throw body;
+            } else {
+                throw new Error('Error api createUser');
+            }
         }
+    } catch (error) {
+        console.error(error);
     }
 }
 
 export async function logUser(UserInfo: { email: string; password: string }) {
-    const response = await fetch(API_LOGIN_USERS, {
-        method: 'POST',
-        headers: {
-            "Accept": "application/json",
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(UserInfo),
-    });
-    const body = await response.json();
-    if (response.ok) {
-        return body;
-    } else {
-        if (body) {
-            throw body;
+    try {
+        const response = await fetch(API_LOGIN_USERS, {
+            method: 'POST',
+            headers: {
+                "Accept": "application/json",
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(UserInfo),
+        });
+        const body = await response.json();
+        if (response.ok) {
+            return body;
         } else {
-            throw new Error('Error api logUser');
+            if (body) {
+                throw body;
+            } else {
+                throw new Error('Error api logUser');
+            }
         }
+    } catch (error) {
+        console.error(error);
     }
 }
 
 
-export async function getCurrentUser(userId: null | number) {
+export async function getCurrentUser(userId: null | string) {
     try {
-        const response = await fetch(`${API_LOGIN_USERS}?user_id=${userId}`, {
+        const response = await fetch(`${API_LOGIN_USERS}?user_id=${Number(userId)}`, {
             headers: {
                 "Accept": "application/json",
                 'Content-Type': 'application/json',
             },
         });
-        const data = response.json();
-        if (!data) throw Error;
-        return data;
+        const body = await response.json();
+        if (response.ok) {
+            return body;
+        } else {
+            if (body) {
+                throw body;
+            } else {
+                throw new Error('Error api getCurrentUser');
+            }
+        }
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
