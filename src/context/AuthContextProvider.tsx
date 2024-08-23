@@ -55,7 +55,7 @@ export function AuthContextProvider({ children }: { children: React.ReactNode })
       //user info on local storage case
       const userData = JSON.parse(storedUserData)
       // On below we compare the expiration date on localStorage of user authentication 
-      if (userData.exp > Math.floor(new Date().getTime() / 1000)) {
+      if ("exp" in userData && userData.exp > Math.floor(new Date().getTime() / 1000)) {
         // user was authenticated less than an hour ago and he not be logged out
         setUserId(String(userData.user_id));
         return true

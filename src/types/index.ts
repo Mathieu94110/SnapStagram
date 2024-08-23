@@ -44,3 +44,9 @@ export type TNavLink = {
     label: string;
 };
 
+export type TPostLikes = {
+    idlike: number,
+    iduser: number,
+    idpost: number,
+    datelike: Date
+}

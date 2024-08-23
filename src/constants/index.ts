@@ -3,6 +3,7 @@ const BASE_POST_API_URI = "http://localhost:8888/api/posts"
 export const API_REGISTER_USERS = `${BASE_USER_API_URI}/register.php`
 export const API_LOGIN_USERS = `${BASE_USER_API_URI}/login.php`
 export const API_POSTS = `${BASE_POST_API_URI}/posts.php`
+export const API_POSTS_LIKES = `${BASE_POST_API_URI}/post-likes.php`
 
 export const sidebarLinks = [
     {

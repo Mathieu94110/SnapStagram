@@ -1,4 +1,4 @@
-import { createPost, updatePost, getPosts, getPostById, getUserPosts, deletePost, likePost } from '@/apis/posts'
+import { createPost, updatePost, getPosts, getPostById, getUserPosts, deletePost, likeDislikePost, getUserPostLikes } from '@/apis/posts'
 import {
     useMutation,
     useQuery,
@@ -98,16 +98,19 @@ export const useDeletePost = () => {
     });
 };
 
-export const useLikePost = () => {
+export const useGetPostLikes = (postId: number) => {
+    return useQuery({
+        queryKey: ['getUserPostLikes', postId],
+        queryFn: () => getUserPostLikes(postId),
+        enabled: !!postId,
+    });
+};
+
+
+export const useLikeDislikePost = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({
-            postId,
-            likesArray,
-        }: {
-            postId: number;
-            likesArray: number[];
-        }) => likePost(postId, likesArray),
+        mutationFn: (likeInfo: FormData) => likeDislikePost(likeInfo),
         onSuccess: (data: TNewPost) => {
             queryClient.invalidateQueries({
                 queryKey: ["getPostById", data?.idpost],

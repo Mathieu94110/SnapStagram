@@ -1,15 +1,16 @@
 import { Link } from "react-router-dom";
-// import PostStats from "./PostStats";
 import { useUserContext } from "@/context/AuthContextProvider";
 import { TNewPost } from "@/types";
 import PostStats from "@/components/shared/PostStats";
+import { useGetPostLikes } from "@/lib/react-query/queries";
+import Loader from "./Loader";
 
 
 const PostCard = ({ post }: { post: TNewPost }) => {
     const { user } = useUserContext()
+    const { data: postLikes, isLoading: isPostLikesLoading, isError: isErrorPostLikes } = useGetPostLikes(post.idpost!);
 
     if (!post.authorId) return;
-
     return (
         <div className="post-card">
             <div className="flex-between">
@@ -68,7 +69,17 @@ const PostCard = ({ post }: { post: TNewPost }) => {
                     className="post-card_img"
                 />
             </Link>
-            <PostStats post={post} userId={user.iduser!} />
+            {isPostLikesLoading && !postLikes ? (
+                <Loader />
+            ) : isErrorPostLikes ?
+                (
+                    <div className="flex flex-1">
+                        <p className="body-medium text-light-1">Une erreur est survenue lors de la récupération des likes</p>
+                    </div>
+                ) : postLikes?.data ? (
+                    <PostStats post={post} userId={user.iduser!} likes={postLikes?.data} />
+                ) : null}
+
         </div>
     );
 };
