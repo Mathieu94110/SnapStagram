@@ -19,10 +19,10 @@ export type TNewPost = {
     caption: string;
     location: string;
     tags: string;
+    created: string;
     image: Blob;
     author: string
     authorId: number,
-    likes: number[]
 };
 
 export type TPostReturn = {

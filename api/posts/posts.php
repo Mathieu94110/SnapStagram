@@ -32,7 +32,7 @@ if ($method === 'GET') {
         }
         echo json_encode($response);
     } else {
-        $posts = $postDB->fetchAllPosts();
+        $posts = $postDB->fetchAllRecentPosts();
         if (count($posts)) {
             $response = ['status' => 1, 'data' => $posts];
         } else {

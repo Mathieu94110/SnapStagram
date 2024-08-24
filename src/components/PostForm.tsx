@@ -72,7 +72,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
         if (value.file) {
             formData.append('file', value.file)
         }
-        formData.append('author', JSON.stringify(user.userName));
+        formData.append('author', user.userName);
         formData.append('authorId', JSON.stringify(user.iduser));
         if (post && action === "Mettre à jour") {
             const response = await updatePost(formData);

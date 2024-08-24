@@ -6,8 +6,8 @@ class PostDB
   private PDOStatement $statementUpdateOneWithImg;
   private PDOStatement $statementUpdateOneWithoutImg;
   private PDOStatement $statementReadOne;
-  private PDOStatement $statementReadAllPosts;
-  private PDOStatement $statementReadUserAllPosts;
+  private PDOStatement $statementReadAllRecentPosts;
+  private PDOStatement $statementReadAllUserPosts;
   private PDOStatement $statementReadAllPostLikes;
   private PDOStatement $statementCreatePostLike;
   private PDOStatement $statementDeletePostLike;
@@ -55,8 +55,8 @@ class PostDB
         authorId=:authorId
       WHERE idpost=:idpost
     ');
-    $this->statementReadAllPosts = $pdo->prepare('SELECT * FROM post LEFT JOIN user ON post.authorId = user.iduser');
-    $this->statementReadUserAllPosts = $pdo->prepare('SELECT * FROM post WHERE authorId=:authorId');
+    $this->statementReadAllRecentPosts = $pdo->prepare('SELECT * FROM post ORDER BY created DESC');
+    $this->statementReadAllUserPosts = $pdo->prepare('SELECT * FROM post WHERE authorId=:authorId');
     $this->statementReadAllPostLikes = $pdo->prepare('SELECT * FROM post_likes WHERE idpost=:idpost');
     $this->statementCreatePostLike = $pdo->prepare(
       '
@@ -73,10 +73,10 @@ class PostDB
   }
 
 
-  public function fetchAllPosts(): array
+  public function fetchAllRecentPosts(): array
   {
-    $this->statementReadAllPosts->execute();
-    return $this->statementReadAllPosts->fetchAll();
+    $this->statementReadAllRecentPosts->execute();
+    return $this->statementReadAllRecentPosts->fetchAll();
   }
 
   public function fetchOne(string $id): array
@@ -146,9 +146,9 @@ class PostDB
 
   public function fetchUserPosts(int $authorId): array
   {
-    $this->statementReadUserAllPosts->bindValue(':authorId', $authorId);
-    $this->statementReadUserAllPosts->execute();
-    return $this->statementReadUserAllPosts->fetchAll();
+    $this->statementReadAllUserPosts->bindValue(':authorId', $authorId);
+    $this->statementReadAllUserPosts->execute();
+    return $this->statementReadAllUserPosts->fetchAll();
   }
 
 
@@ -164,7 +164,7 @@ class PostDB
     $this->statementCreatePostLike->bindParam(':iduser', $likeInfo['iduser'], PDO::PARAM_INT);
     $this->statementCreatePostLike->bindParam(':idpost', $likeInfo['idpost'], PDO::PARAM_INT);
     if ($this->statementCreatePostLike->execute()) {
-      $response = ['status' => 1, 'message' => 'Like, dislike créer avec succès !'];
+      $response = ['status' => 1, 'message' => 'Like créer avec succès !'];
     } else {
       $response = ['status' => 1, 'message' => 'Echec de la demande de like/dislike !'];
     }
@@ -178,7 +178,7 @@ class PostDB
     $this->statementDeletePostLike->bindParam(':iduser', $likeInfo['iduser'], PDO::PARAM_INT);
     $this->statementDeletePostLike->bindParam(':idpost', $likeInfo['idpost'], PDO::PARAM_INT);
     if ($this->statementDeletePostLike->execute()) {
-      $response = ['status' => 1, 'message' => 'Like supprimé avec succès !'];
+      $response = ['status' => 1, 'message' => 'Like retiré avec succès !'];
     } else {
       $response = ['status' => 0, 'message' => 'Echec de supression du like !'];
     }

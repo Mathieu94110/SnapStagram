@@ -4,6 +4,7 @@ import { TNewPost } from "@/types";
 import PostStats from "@/components/shared/PostStats";
 import { useGetPostLikes } from "@/lib/react-query/queries";
 import Loader from "./Loader";
+import { multiFormatDateString } from "@/lib/utils";
 
 
 const PostCard = ({ post }: { post: TNewPost }) => {
@@ -26,6 +27,9 @@ const PostCard = ({ post }: { post: TNewPost }) => {
                     <div className="flex flex-col">
                         <p className="base-medium lg:body-bold text-light-1">
                             {post.author}
+                        </p>
+                        <p className="subtle-semibold lg:small-regular ">
+                            {multiFormatDateString(post.created)}
                         </p>
                         <div className="flex-center gap-2 text-light-3">
                             <p className="subtle-semibold lg:small-regular ">
