@@ -180,3 +180,27 @@ export async function getUserPostLikes(postId: number) {
     }
 }
 
+export async function searchPosts(searchTerm: string) {
+    try {
+        const response = await fetch(`${API_POSTS}?search=${searchTerm}`, {
+            headers: {
+                "Accept": "application/json",
+                'Content-Type': 'application/json',
+            },
+        });
+        const body = await response.json();
+        if (response.ok) {
+            return body;
+        } else {
+            if (body) {
+                throw body;
+            } else {
+                throw new Error('Error api get post Likes ');
+            }
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+

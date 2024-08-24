@@ -31,6 +31,15 @@ if ($method === 'GET') {
             $response = ['status' => 0, 'message' => "Aucun post trouvé pour cet utilisateur !"];
         }
         echo json_encode($response);
+    } elseif (isset($_GET['search'])) {
+        $search = $_GET['search'] ?? '';
+        $posts = $postDB->searchPostIncludeTerm($search);
+        if (count($posts)) {
+            $response = ['status' => 1, 'data' => $posts];
+        } else {
+            $response = ['status' => 0, 'message' => "Aucun post trouvé avec les termes cités!"];
+        }
+        echo json_encode($response);
     } else {
         $posts = $postDB->fetchAllRecentPosts();
         if (count($posts)) {
@@ -56,8 +65,10 @@ if ($method === 'POST') {
 
     if (empty($_FILES['file'])) {
         $id = $_GET['post_id'] ?? '';
-        $post['idpost'] = $id;
-        $postDB->updateOne($post);
+        if ($id !== '') {
+            $post['idpost'] = $id;
+            $postDB->updateOne($post);
+        }
     } else {
         // post with new image 
         $file_name = $_FILES["file"]["name"];

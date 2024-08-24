@@ -13,7 +13,7 @@ export const sidebarLinks = [
     },
     {
         imgURL: "/public/assets/images/wallpaper.svg",
-        route: "/explore",
+        route: "/search-posts",
         label: "Rechercher",
     },
     {

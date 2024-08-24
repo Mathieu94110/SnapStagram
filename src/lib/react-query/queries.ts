@@ -1,4 +1,4 @@
-import { createPost, updatePost, getPosts, getPostById, getUserPosts, deletePost, likeDislikePost, getUserPostLikes } from '@/apis/posts'
+import { createPost, updatePost, getPosts, getPostById, getUserPosts, deletePost, likeDislikePost, getUserPostLikes, searchPosts } from '@/apis/posts'
 import {
     useMutation,
     useQuery,
@@ -116,5 +116,13 @@ export const useLikeDislikePost = () => {
                 queryKey: ["getUserPostLikes"],
             });
         },
+    });
+};
+
+export const useSearchPosts = (searchTerm: string) => {
+    return useQuery({
+        queryKey: ['getSearchPosts', searchTerm],
+        queryFn: () => searchPosts(searchTerm),
+        enabled: !!searchTerm,
     });
 };

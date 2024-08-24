@@ -11,7 +11,7 @@ class PostDB
   private PDOStatement $statementReadAllPostLikes;
   private PDOStatement $statementCreatePostLike;
   private PDOStatement $statementDeletePostLike;
-
+  private PDOStatement $statementFetchPostWithTerm;
 
   function __construct(private PDO $pdo)
   {
@@ -70,8 +70,10 @@ class PostDB
       '
     );
     $this->statementDeletePostLike = $pdo->prepare('DELETE FROM post_likes WHERE iduser=:iduser AND idpost=:idpost');
-  }
 
+
+    $this->statementFetchPostWithTerm = $pdo->prepare('SELECT * FROM post WHERE caption LIKE :term');
+  }
 
   public function fetchAllRecentPosts(): array
   {
@@ -151,7 +153,6 @@ class PostDB
     return $this->statementReadAllUserPosts->fetchAll();
   }
 
-
   public function fetchPostLikes(int $id): array
   {
     $this->statementReadAllPostLikes->bindValue(':idpost', $id);
@@ -171,8 +172,6 @@ class PostDB
     echo json_encode($response);
   }
 
-
-
   public function  deletePostLike($likeInfo): void
   {
     $this->statementDeletePostLike->bindParam(':iduser', $likeInfo['iduser'], PDO::PARAM_INT);
@@ -183,6 +182,14 @@ class PostDB
       $response = ['status' => 0, 'message' => 'Echec de supression du like !'];
     }
     echo json_encode($response);
+  }
+
+  public function searchPostIncludeTerm(string $term): array
+  {
+    $this->statementFetchPostWithTerm->bindParam(':term', $term);
+    if ($this->statementFetchPostWithTerm->execute()) {
+      return $this->statementFetchPostWithTerm->fetchAll();
+    }
   }
 }
 
