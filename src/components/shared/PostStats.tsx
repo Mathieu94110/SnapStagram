@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useLikeDislikePost } from "@/lib/react-query/queries";
 import { TNewPost, TPostLikes } from "@/types";
@@ -7,7 +6,6 @@ import { checkIsLiked } from "@/lib/utils";
 const PostStats = ({ post, userId, likes }: { post: TNewPost, userId: number, likes: TPostLikes[] }) => {
     const location = useLocation();
     const { mutate: likeDislikePost } = useLikeDislikePost();
-    const [likesQty, setLikesQty] = useState<number>(likes.length);
 
     const handleLikePost = (
         e: React.MouseEvent<HTMLImageElement, MouseEvent>
@@ -21,12 +19,10 @@ const PostStats = ({ post, userId, likes }: { post: TNewPost, userId: number, li
             // user already likes post
             formData.append('type', 'dislike');
             likeDislikePost(formData)
-            likesQty > 0 && setLikesQty(likesQty - 1);
         }
         else {
             formData.append('type', 'like');
             likeDislikePost(formData);
-            setLikesQty(likesQty + 1);
         }
     };
 
@@ -49,7 +45,7 @@ const PostStats = ({ post, userId, likes }: { post: TNewPost, userId: number, li
                     onClick={(e) => handleLikePost(e)}
                     className="cursor-pointer"
                 />
-                <p className="small-medium lg:base-medium">{likesQty}</p>
+                <p className="small-medium lg:base-medium">{likes.length}</p>
             </div>
         </div>
     );

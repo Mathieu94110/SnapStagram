@@ -111,15 +111,9 @@ export const useLikeDislikePost = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (likeInfo: FormData) => likeDislikePost(likeInfo),
-        onSuccess: (data: TNewPost) => {
+        onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: ["getPostById", data?.idpost],
-            });
-            queryClient.invalidateQueries({
-                queryKey: ["getRecentPosts"],
-            });
-            queryClient.invalidateQueries({
-                queryKey: ["getPosts"],
+                queryKey: ["getUserPostLikes"],
             });
         },
     });
