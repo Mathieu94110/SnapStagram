@@ -31,7 +31,7 @@ export type TPostReturn = {
 }
 
 export type TNewPostDataArray = {
-    data?: TNewPost[],
+    data: TNewPost[],
 } & TPostReturn
 
 export type TNewPostData = {
@@ -50,3 +50,8 @@ export type TPostLikes = {
     idpost: number,
     datelike: Date
 }
+
+export type SearchResultProps = {
+    isSearchFetching: boolean;
+    searchedPosts: TNewPost[];
+};

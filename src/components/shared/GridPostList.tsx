@@ -42,7 +42,7 @@ const GridPostList = ({
         <ul className="grid-container">
             {posts.map((post) => (
                 <li key={post.idpost} className="relative min-w-80 h-80">
-                    <Link to={`/update-post/${post.idpost}`} className="grid-post_link">
+                    <Link to={post.authorId === user.iduser ? `/update-post/${post.idpost}` : `/posts/${post.idpost}`} className="grid-post_link">
                         <img
                             src={`http://localhost:8888/api/${JSON.stringify(post.image).slice(4, -1)}`}
                             alt="post"

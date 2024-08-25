@@ -15,7 +15,7 @@ import {
 import FileUploader from "./FileUploader"
 import { useUserContext } from '@/context/AuthContextProvider'
 import { useCreatePost, useUpdatePost } from '@/lib/react-query/queries'
-import Loader from "./Loader"
+import Loader from "./shared/Loader"
 import { TNewPostData } from "@/types"
 
 type PostFormProps = {

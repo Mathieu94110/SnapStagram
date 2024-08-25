@@ -8,6 +8,7 @@ import CreatePost from "@/_root/pages/CreatePost.js";
 import EditPost from "./_root/pages/EditPost";
 import UserPosts from "./_root/pages/UserPosts";
 import SearchPosts from "./_root/pages/SearchPosts";
+import PostDetails from "./_root/pages/PostDetails";
 
 const router = createBrowserRouter([
     {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
             {
                 path: '/search-posts',
                 element: <SearchPosts />
+            },
+            {
+                path: '/posts/:id',
+                element: <PostDetails />
             },
         ]
     },

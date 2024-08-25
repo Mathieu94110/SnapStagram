@@ -4,7 +4,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useUserContext } from '@/context/AuthContextProvider'
 import { useSignInAccount } from '@/lib/react-query/queries';
-import Loader from '@/components/Loader'
+import { Loader } from '@/components/shared'
 
 type UserSigninInput = {
   email: string;

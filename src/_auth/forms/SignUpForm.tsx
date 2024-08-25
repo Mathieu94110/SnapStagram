@@ -4,7 +4,7 @@ import { toast } from 'react-hot-toast'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useCreateUserAccount } from "@/lib/react-query/queries"
-import Loader from "@/components/Loader"
+import { Loader } from "@/components/shared"
 
 type UserSignupInput = {
   name: string;

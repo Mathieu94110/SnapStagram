@@ -1,5 +1,4 @@
-import GridPostList from '@/components/shared/GridPostList';
-import Loader from '@/components/Loader';
+import { Loader, GridPostList } from '@/components/shared';
 import { useUserContext } from '@/context/AuthContextProvider';
 import { useGetUserPosts } from '@/lib/react-query/queries';
 

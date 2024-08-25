@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { useUserContext } from "@/context/AuthContextProvider";
 import { TNewPost } from "@/types";
-import PostStats from "@/components/shared/PostStats";
+import { PostStats } from "@/components/shared";
 import { useGetPostLikes } from "@/lib/react-query/queries";
-import Loader from "./Loader";
+import Loader from "./shared/Loader";
 import { multiFormatDateString } from "@/lib/utils";
 
 
@@ -80,10 +80,9 @@ const PostCard = ({ post }: { post: TNewPost }) => {
                     <div className="flex flex-1">
                         <p className="body-medium text-light-1">Une erreur est survenue lors de la récupération des likes</p>
                     </div>
-                ) : postLikes?.data ? (
-                    <PostStats post={post} userId={user.iduser!} likes={postLikes?.data} />
-                ) : null}
-
+                ) : (
+                    <PostStats post={post} userId={user.iduser!} likes={postLikes?.data ?? []} />
+                )}
         </div>
     );
 };

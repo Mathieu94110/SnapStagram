@@ -1,20 +1,20 @@
 import { useState } from 'react'
-import Loader from '@/components/Loader';
+import { Loader } from '@/components/shared';
 import { Input } from '@/components/ui';
 import useDebounce from '@/hooks/useDebounce';
 import { useGetPosts, useSearchPosts } from '@/lib/react-query/queries';
-import GridPostList from '@/components/shared/GridPostList';
-
+import { GridPostList } from '@/components/shared';
+import SearchResults from '@/components/SearchResults';
 
 const SearchPosts = () => {
     const [searchValue, setSearchValue] = useState("");
-    const debouncedSearch = useDebounce(searchValue, 1000);
+    const debouncedSearch = useDebounce(searchValue, 800);
     const {
         data: posts,
         isLoading: isPostLoading,
     } = useGetPosts();
-    // const { data: searchedPosts, isLoading, isFetching: isSearchFetching } = useSearchPosts(debouncedSearch);
-    // const shouldShowSearchResults = searchValue !== "";
+    const { data: searchedPosts, isFetching: isSearchFetching } = useSearchPosts(debouncedSearch);
+    const shouldShowSearchResults = searchValue !== "";
 
     if (!posts && isPostLoading)
         return (
@@ -46,35 +46,47 @@ const SearchPosts = () => {
                     />
                 </div>
             </div>
-            {posts && !isPostLoading ? posts.data.length > 0 ? (
-                <>
-                    <div className="flex-between w-full max-w-5xl mt-16 mb-7">
-                        <h3 className="body-bold md:h3-bold">Posts populaires</h3>
 
-                        <div className="flex-center gap-3 bg-dark-3 rounded-xl px-4 py-2 cursor-pointer">
-                            <p className="small-medium md:base-medium text-light-2">Tous</p>
-                            <img
-                                src="/public/assets/images/filter.svg"
-                                width={20}
-                                height={20}
-                                alt="filter"
-                            />
+            {
+                // Case search query find result 
+                shouldShowSearchResults ? searchedPosts?.data ? (
+                    <SearchResults
+                        isSearchFetching={isSearchFetching}
+                        searchedPosts={searchedPosts.data}
+                    />
+                ) : (
+                    //If no result message from db
+                    <div className="home-container">
+                        <p className="body-medium text-light-1">{searchedPosts?.message}</p>
+                    </div>
+                )
+                    // Else diplay initial Posts
+                    : posts && posts.data.length > 0 ? (
+                        <>
+                            <div className="flex-between w-full max-w-5xl mt-16 mb-7">
+                                <h3 className="body-bold md:h3-bold">Posts populaires</h3>
+
+                                <div className="flex-center gap-3 bg-dark-3 rounded-xl px-4 py-2 cursor-pointer">
+                                    <p className="small-medium md:base-medium text-light-2">Tous</p>
+                                    <img
+                                        src="/public/assets/images/filter.svg"
+                                        width={20}
+                                        height={20}
+                                        alt="filter"
+                                    />
+                                </div>
+                            </div>
+                            <div className="flex flex-wrap gap-9 w-full max-w-5xl">
+                                <GridPostList posts={posts.data} />
+                            </div>
+                        </>
+                    ) : (
+                        //Or not if there's none
+                        <div className="home-container">
+                            <p className="body-medium text-light-1">Il n'y a pas encore de post</p>
                         </div>
-                    </div>
-                    <div className="flex flex-wrap gap-9 w-full max-w-5xl">
-                        <GridPostList posts={posts.data} />
-                    </div>
-                </>
-            ) : (
-                <div className="home-container">
-                    <p className="body-medium text-light-1">Il n'a a pas encore de post</p>
-                </div>
 
-            ) : (
-                <div className="home-container">
-                    <p className="body-medium text-light-1">Une erreur est survenue lors de la récupération des posts</p>
-                </div>
-            )}
+                    )}
 
             <div className="flex flex-wrap gap-9 w-full max-w-5xl">
             </div>

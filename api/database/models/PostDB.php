@@ -70,9 +70,7 @@ class PostDB
       '
     );
     $this->statementDeletePostLike = $pdo->prepare('DELETE FROM post_likes WHERE iduser=:iduser AND idpost=:idpost');
-
-
-    $this->statementFetchPostWithTerm = $pdo->prepare('SELECT * FROM post WHERE caption LIKE :term');
+    $this->statementFetchPostWithTerm = $pdo->prepare('SELECT * FROM post WHERE caption LIKE :term OR tags LIKE :term');
   }
 
   public function fetchAllRecentPosts(): array
@@ -186,7 +184,7 @@ class PostDB
 
   public function searchPostIncludeTerm(string $term): array
   {
-    $this->statementFetchPostWithTerm->bindParam(':term', $term);
+    $this->statementFetchPostWithTerm->bindValue(':term', '%' . $term . '%', \PDO::PARAM_STR);
     if ($this->statementFetchPostWithTerm->execute()) {
       return $this->statementFetchPostWithTerm->fetchAll();
     }

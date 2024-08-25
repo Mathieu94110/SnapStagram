@@ -1,4 +1,4 @@
-import Loader from '@/components/Loader';
+import { Loader } from '@/components/shared';
 import PostCard from '@/components/PostCard';
 import { useUserContext } from '@/context/AuthContextProvider'
 import { useGetPosts } from '@/lib/react-query/queries';
